@@ -1,0 +1,26 @@
+.Transaction {
+    width: 60%;
+    max-width: 450px;
+    min-height: 80px;
+    border: 1px solid gray;
+    margin: 10px auto;
+    padding: 16px;
+    box-shadow: 0 2px 3px lightgray;
+}
+
+.Input {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.InputRight{
+    width: 60%;
+    
+}
+
+.InputLeft{
+    width: 20%;
+}
+
+
