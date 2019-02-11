@@ -1,19 +1,21 @@
-import React, { Component } from 'react';
-import Aux from '../../hoc/_Aux';
-import Transaction from '../../components/Transaction/Transaction';
+import React from "react";
+import Transaction from "../../components/Transaction/Transaction";
 
+const TransactionsScreen = props => {
+  const currentTransaction = [...props.transactions];
 
-class TransactionsScreen extends Component {
-    render() {
-        return (
-            <Aux>
-                <Transaction />
-                <button>Add</button>
-            </Aux>
-        
-        )
-
-    }
-}
-
+  const transactions = currentTransaction.map((transaction, index) => {
+    return (
+      <Transaction
+        amount={transaction.amount}
+        description={transaction.description}
+        toggle={transaction.toggle}
+        shareWith={transaction.shareWith}
+        key={"transaction " + index}
+        inputChanged={event => props.inputChanged(event, index)}
+      />
+    );
+  });
+  return transactions;
+};
 export default TransactionsScreen;
