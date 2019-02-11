@@ -1,25 +1,35 @@
-import React, { Component } from 'react';
-import classes from './Transaction.module.css';
-import Toggle from './Toggle/Toggle';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import classes from "./Transaction.module.css";
+import Toggle from "./Toggle/Toggle";
+import PropTypes from "prop-types";
 
 class Transaction extends Component {
-    render() {
-        return(
-            <div className={classes.Transaction}>
-                <div className={classes.Input}>
-                    <input value={this.props.amout} className={classes.InputLeft} />
-                    <input value={this.props.description} className={classes.InputRight}/>
-                </div>
-                <Toggle />       
-            </div>
-        ) 
-    } 
-};
-
-Transaction.PropTypes = {
-    amout: PropTypes.currency,
-    description: PropTypes.string
+  render() {
+    return (
+      <div className={classes.Transaction}>
+        <div className={classes.Input}>
+          <input
+            id="amountInput"
+            value={this.props.amount}
+            onChange={this.props.inputChanged}
+            className={classes.InputLeft}
+          />
+          <input
+            id="descriptionInput"
+            value={this.props.description}
+            onChange={this.props.inputChanged}
+            className={classes.InputRight}
+          />
+        </div>
+        <Toggle />
+      </div>
+    );
+  }
 }
+
+Transaction.propTypes = {
+  amout: PropTypes.number,
+  description: PropTypes.string
+};
 
 export default Transaction;
