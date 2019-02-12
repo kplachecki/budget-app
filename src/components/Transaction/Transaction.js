@@ -5,6 +5,16 @@ import PropTypes from "prop-types";
 
 class Transaction extends Component {
   render() {
+    let extension = null;
+
+    if (this.props.toggle) {
+      extension = (
+        <div>
+          <input />
+        </div>
+      );
+    }
+
     return (
       <div className={classes.Transaction}>
         <button onClick={this.props.deleteTransaction}>delete</button>
@@ -22,7 +32,8 @@ class Transaction extends Component {
             className={classes.InputRight}
           />
         </div>
-        <Toggle />
+        <Toggle toggleSwitch={this.props.toggleSwitch} />
+        {extension}
       </div>
     );
   }

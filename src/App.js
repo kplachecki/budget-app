@@ -22,6 +22,13 @@ class App extends Component {
     ]
   };
 
+  onToggleSwitch = index => {
+    const transaction = [...this.state.transactions];
+    transaction[index].toggle = !transaction[index].toggle;
+    console.log(transaction[index].toggle);
+    this.setState({ transactions: transaction });
+  };
+
   onAddTransaction = () => {
     const defaultTransaction = { ...TRANSACTION };
     const transaction = [...this.state.transactions];
@@ -72,6 +79,7 @@ class App extends Component {
             transactions={this.state.transactions}
             inputChanged={this.onInputHandler}
             deleteTransaction={this.onDeleteTransaction}
+            toggleSwitch={this.onToggleSwitch}
           />
         </Layout>
       </Aux>
