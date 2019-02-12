@@ -7,15 +7,16 @@ class Transaction extends Component {
   render() {
     return (
       <div className={classes.Transaction}>
+        <button onClick={this.props.deleteTransaction}>delete</button>
         <div className={classes.Input}>
           <input
-            id="amountInput"
+            name="amountInput"
             value={this.props.amount}
             onChange={this.props.inputChanged}
             className={classes.InputLeft}
           />
           <input
-            id="descriptionInput"
+            name="descriptionInput"
             value={this.props.description}
             onChange={this.props.inputChanged}
             className={classes.InputRight}

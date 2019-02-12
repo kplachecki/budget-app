@@ -13,6 +13,7 @@ const TransactionsScreen = props => {
         shareWith={transaction.shareWith}
         key={"transaction " + index}
         inputChanged={event => props.inputChanged(event, index)}
+        deleteTransaction={() => props.deleteTransaction(index)}
       />
     );
   });

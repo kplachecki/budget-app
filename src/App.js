@@ -3,9 +3,16 @@ import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScre
 import Aux from "./hoc/_Aux";
 import Layout from "./components/Layout/Layout";
 
+const TRANSACTION = {
+  amount: 0,
+  description: "",
+  toggle: false,
+  shareWith: null
+};
+
 class App extends Component {
   state = {
-    transaction: [
+    transactions: [
       {
         amount: 0,
         description: "",
@@ -15,35 +22,43 @@ class App extends Component {
     ]
   };
 
-  // onAddTransaction = index => {
-  //   const transactions = [...this.state.transaction];
-  //   transactions.push(transactions);
-  //   this.setState({ transaction: transactions });
-  // };
+  onAddTransaction = () => {
+    const defaultTransaction = { ...TRANSACTION };
+    const transaction = [...this.state.transactions];
+
+    transaction.push(defaultTransaction);
+    this.setState({ transactions: transaction });
+  };
+
+  onDeleteTransaction = index => {
+    const transaction = [...this.state.transactions];
+
+    transaction.splice(index, 1);
+    this.setState({ transactions: transaction });
+  };
 
   onInputHandler = (event, index) => {
-    const transactions = [...this.state.transaction];
-    const currentTransaction = transactions[index];
-    console.log(index);
+    const transaction = [...this.state.transactions];
+    const currentTransaction = transaction[index];
 
-    if (event.target.id === "descriptionInput") {
+    if (event.target.name === "descriptionInput") {
       const newDescription = event.target.value;
       const prevDescription = currentTransaction.description;
 
       if (prevDescription !== newDescription) {
         currentTransaction.description = newDescription;
         this.setState({
-          transaction: transactions
+          transactions: transaction
         });
       }
-    } else if (event.target.id === "amountInput") {
+    } else if (event.target.name === "amountInput") {
       const newAmount = event.target.value;
       const prevAmount = currentTransaction.amount;
 
       if (prevAmount !== newAmount) {
         currentTransaction.amount = newAmount;
         this.setState({
-          transaction: transactions
+          transactions: transaction
         });
       }
     }
@@ -54,8 +69,9 @@ class App extends Component {
       <Aux>
         <Layout addTransaction={this.onAddTransaction}>
           <TransactionsScreen
-            transactions={this.state.transaction}
+            transactions={this.state.transactions}
             inputChanged={this.onInputHandler}
+            deleteTransaction={this.onDeleteTransaction}
           />
         </Layout>
       </Aux>
