@@ -34,7 +34,7 @@ class App extends Component {
     const defaultTransaction = { ...TRANSACTION };
     const transaction = [...this.state.transactions];
 
-    transaction.push(defaultTransaction);
+    transaction.unshift(defaultTransaction);
     this.setState({ transactions: transaction });
   };
 
