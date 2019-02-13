@@ -15,6 +15,7 @@ const TransactionsScreen = props => {
         inputChanged={event => props.inputChanged(event, index)}
         deleteTransaction={() => props.deleteTransaction(index)}
         toggleSwitch={() => props.toggleSwitch(index)}
+        date={transaction.date}
       />
     );
   });

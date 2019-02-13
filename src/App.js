@@ -24,6 +24,26 @@ class App extends Component {
     ]
   };
 
+  transactionDate = () => {
+    const transaction = [...this.state.transactions];
+    const today = new Date();
+    const month = today.toLocaleString("pl-pl", { month: "long" });
+    transaction[1].date =
+      today.getDate() +
+      " " +
+      month +
+      " " +
+      today.getFullYear() +
+      " " +
+      today.getHours() +
+      ":" +
+      today.getMinutes() +
+      ":" +
+      today.getSeconds();
+    console.log(transaction[1].date);
+    this.setState({ transactions: transaction });
+  };
+
   onToggleSwitch = index => {
     const transaction = [...this.state.transactions];
     transaction[index].toggle = !transaction[index].toggle;
@@ -35,7 +55,7 @@ class App extends Component {
     const transaction = [...this.state.transactions];
 
     transaction.unshift(defaultTransaction);
-    this.setState({ transactions: transaction });
+    this.setState({ transactions: transaction }, () => this.transactionDate());
   };
 
   onDeleteTransaction = index => {
