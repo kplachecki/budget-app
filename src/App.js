@@ -4,20 +4,22 @@ import Aux from "./hoc/_Aux";
 import Layout from "./components/Layout/Layout";
 
 const TRANSACTION = {
-  amount: 0,
+  amount: "",
   description: "",
   toggle: false,
-  shareWith: null
+  shareWith: "",
+  date: null
 };
 
 class App extends Component {
   state = {
     transactions: [
       {
-        amount: 0,
+        amount: "",
         description: "",
         toggle: false,
-        shareWith: null
+        shareWith: "",
+        date: null
       }
     ]
   };
@@ -25,7 +27,6 @@ class App extends Component {
   onToggleSwitch = index => {
     const transaction = [...this.state.transactions];
     transaction[index].toggle = !transaction[index].toggle;
-    console.log(transaction[index].toggle);
     this.setState({ transactions: transaction });
   };
 
@@ -64,6 +65,16 @@ class App extends Component {
 
       if (prevAmount !== newAmount) {
         currentTransaction.amount = newAmount;
+        this.setState({
+          transactions: transaction
+        });
+      }
+    } else if (event.target.name === "shareWithInput") {
+      const newShareWith = event.target.value;
+      const prevShareWith = currentTransaction.shareWith;
+
+      if (prevShareWith !== newShareWith) {
+        currentTransaction.shareWith = newShareWith;
         this.setState({
           transactions: transaction
         });
