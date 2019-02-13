@@ -1,4 +1,11 @@
-.Button {
-    display: flex;
-    justify-content: space-between;
+.SharedBill {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.Input {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 10px;
 }
