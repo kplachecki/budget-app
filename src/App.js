@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
-import Aux from "./hoc/_Aux";
 import Layout from "./components/Layout/Layout";
 
 const TRANSACTION = {
@@ -24,6 +23,26 @@ class App extends Component {
     ]
   };
 
+  transactionDate = () => {
+    const transaction = [...this.state.transactions];
+    const today = new Date();
+    const month = today.toLocaleString("pl-pl", { month: "long" });
+    transaction[1].date =
+      today.getDate() +
+      " " +
+      month +
+      " " +
+      today.getFullYear() +
+      " " +
+      today.getHours() +
+      ":" +
+      today.getMinutes() +
+      ":" +
+      today.getSeconds();
+    console.log(transaction[1].date);
+    this.setState({ transactions: transaction });
+  };
+
   onToggleSwitch = index => {
     const transaction = [...this.state.transactions];
     transaction[index].toggle = !transaction[index].toggle;
@@ -35,7 +54,7 @@ class App extends Component {
     const transaction = [...this.state.transactions];
 
     transaction.unshift(defaultTransaction);
-    this.setState({ transactions: transaction });
+    this.setState({ transactions: transaction }, () => this.transactionDate());
   };
 
   onDeleteTransaction = index => {
@@ -84,7 +103,7 @@ class App extends Component {
 
   render() {
     return (
-      <Aux>
+      <React.Fragment>
         <Layout addTransaction={this.onAddTransaction}>
           <TransactionsScreen
             transactions={this.state.transactions}
@@ -93,7 +112,7 @@ class App extends Component {
             toggleSwitch={this.onToggleSwitch}
           />
         </Layout>
-      </Aux>
+      </React.Fragment>
     );
   }
 }

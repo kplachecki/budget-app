@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import classes from "./Toggle.module.css";
-import Aux from "../../../hoc/_Aux";
 class Toggle extends Component {
   render() {
     let extension = null;
@@ -18,13 +17,13 @@ class Toggle extends Component {
       );
     }
     return (
-      <Aux>
+      <React.Fragment>
         <div className={classes.SharedBill}>
           <span>Shared bill</span>
           <button onClick={this.props.toggleSwitch}>Toggle Button</button>
         </div>
         {extension}
-      </Aux>
+      </React.Fragment>
     );
   }
 }
