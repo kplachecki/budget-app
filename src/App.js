@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
-import Aux from "./hoc/_Aux";
 import Layout from "./components/Layout/Layout";
 
 const TRANSACTION = {
@@ -104,7 +103,7 @@ class App extends Component {
 
   render() {
     return (
-      <Aux>
+      <React.Fragment>
         <Layout addTransaction={this.onAddTransaction}>
           <TransactionsScreen
             transactions={this.state.transactions}
@@ -113,7 +112,7 @@ class App extends Component {
             toggleSwitch={this.onToggleSwitch}
           />
         </Layout>
-      </Aux>
+      </React.Fragment>
     );
   }
 }

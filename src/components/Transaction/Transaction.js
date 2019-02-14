@@ -3,7 +3,6 @@ import classes from "./Transaction.module.css";
 import Toggle from "./Toggle/Toggle";
 import PropTypes from "prop-types";
 import TransactionDate from "./TransactionDate/TransactionDate";
-import Aux from "../../hoc/_Aux";
 
 class Transaction extends Component {
   render() {
@@ -12,7 +11,7 @@ class Transaction extends Component {
       line = <hr style={{ width: "50%" }} />;
     }
     return (
-      <Aux>
+      <React.Fragment>
         {line}
         <TransactionDate date={this.props.date} />
         <div className={classes.Transaction}>
@@ -44,7 +43,7 @@ class Transaction extends Component {
             inputChanged={this.props.inputChanged}
           />
         </div>
-      </Aux>
+      </React.Fragment>
     );
   }
 }
