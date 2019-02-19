@@ -20,7 +20,34 @@ class App extends Component {
         shareWith: "",
         date: null
       }
-    ]
+    ],
+    budget: null
+  };
+
+  budgetDeduction = index => {
+    const transaction = [...this.state.transactions];
+    const currentTransaction = transaction[index];
+    const currentBudget = this.state.budget;
+
+    const newBudget = currentBudget + Number(currentTransaction.amount);
+    this.setState({ budget: newBudget });
+  };
+
+  budgetAdd = () => {
+    const transaction = [...this.state.transactions];
+    const currentBudget = this.state.budget;
+
+    const newBudget = currentBudget - transaction[1].amount;
+    this.setState({ budget: newBudget });
+  };
+
+  onBudgetChange = event => {
+    const currentBudget = this.state.budget;
+    const newBudget = event.target.value;
+
+    if (currentBudget !== newBudget) {
+      this.setState({ budget: newBudget });
+    }
   };
 
   transactionDate = () => {
@@ -39,7 +66,6 @@ class App extends Component {
       today.getMinutes() +
       ":" +
       today.getSeconds();
-    console.log(transaction[1].date);
     this.setState({ transactions: transaction });
   };
 
@@ -54,12 +80,19 @@ class App extends Component {
     const transaction = [...this.state.transactions];
 
     transaction.unshift(defaultTransaction);
-    this.setState({ transactions: transaction }, () => this.transactionDate());
+    this.setState({ transactions: transaction }, () => {
+      this.transactionDate();
+      this.budgetAdd();
+    });
   };
 
   onDeleteTransaction = index => {
     const transaction = [...this.state.transactions];
 
+    if (transaction.length <= 1) {
+      return;
+    }
+    this.budgetDeduction(index);
     transaction.splice(index, 1);
     this.setState({ transactions: transaction });
   };
@@ -104,7 +137,11 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <Layout addTransaction={this.onAddTransaction}>
+        <Layout
+          addTransaction={this.onAddTransaction}
+          budgetChange={this.onBudgetChange}
+          budget={this.state.budget}
+        >
           <TransactionsScreen
             transactions={this.state.transactions}
             inputChanged={this.onInputHandler}
