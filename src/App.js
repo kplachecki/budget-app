@@ -29,17 +29,15 @@ class App extends Component {
     const currentTransaction = transaction[index];
     const currentBudget = this.state.budget;
 
-    let newBudget = 0;
-    newBudget = currentBudget + Number(currentTransaction.amount);
+    const newBudget = currentBudget + Number(currentTransaction.amount);
     this.setState({ budget: newBudget });
   };
 
   budgetAdd = () => {
     const transaction = [...this.state.transactions];
     const currentBudget = this.state.budget;
-    let newBudget = 0;
 
-    newBudget = currentBudget - transaction[1].amount;
+    const newBudget = currentBudget - transaction[1].amount;
     this.setState({ budget: newBudget });
   };
 

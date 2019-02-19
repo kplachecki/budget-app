@@ -25,6 +25,7 @@ class Transaction extends Component {
             <input
               name="amountInput"
               placeholder="0"
+              type="number"
               value={this.props.amount}
               onChange={this.props.inputChanged}
               className={classes.InputLeft}
