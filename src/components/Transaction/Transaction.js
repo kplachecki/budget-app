@@ -3,36 +3,13 @@ import classes from "./Transaction.module.css";
 import Toggle from "./Toggle/Toggle";
 import PropTypes from "prop-types";
 import TransactionDate from "./TransactionDate/TransactionDate";
+import DeleteButton from "./DeleteButton/DeleteButton";
+import Editbutton from "./EditButton/EditButton";
 
 class Transaction extends Component {
   render() {
     const line =
       this.props.date != null ? <hr style={{ width: "50%" }} /> : null;
-
-    const editArr = [];
-    let editStr = "edit";
-    if (this.props.isEditable) {
-      editArr.push(classes.Accept);
-      editStr = "accept";
-    }
-
-    let deleteButton = null;
-    let editButton = null;
-    if (this.props.index !== 0) {
-      deleteButton = (
-        <button
-          onClick={this.props.deleteTransaction}
-          className={classes.Delete}
-        >
-          delete
-        </button>
-      );
-      editButton = (
-        <button onClick={this.props.onEdit} className={editArr.join(" ")}>
-          {editStr}
-        </button>
-      );
-    }
 
     let transactionContent = (
       <div className={classes.Input}>
@@ -83,8 +60,15 @@ class Transaction extends Component {
         {line}
         <TransactionDate date={this.props.date} />
         <div className={classes.Transaction}>
-          {deleteButton}
-          {editButton}
+          <DeleteButton
+            index={this.props.index}
+            deleteTransaction={this.props.deleteTransaction}
+          />
+          <Editbutton
+            isEditable={this.props.isEditable}
+            onEdit={this.props.onEdit}
+            index={this.props.index}
+          />
           {transactionContent}
           {toggleContent}
         </div>
