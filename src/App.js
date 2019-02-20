@@ -7,7 +7,8 @@ const TRANSACTION = {
   description: "",
   toggle: false,
   shareWith: "",
-  date: null
+  date: null,
+  isEditable: false
 };
 
 class App extends Component {
@@ -18,10 +19,24 @@ class App extends Component {
         description: "",
         toggle: false,
         shareWith: "",
-        date: null
+        date: null,
+        isEditable: false
       }
     ],
     budget: null
+  };
+
+  // inputValidation = (event) => {
+
+  //   if ((event.target.value).length === 0) {
+
+  //   }
+  // }
+
+  onEdit = index => {
+    const transaction = [...this.state.transactions];
+    transaction[index].isEditable = !transaction[index].isEditable;
+    this.setState({ transactions: transaction });
   };
 
   budgetDeduction = index => {
@@ -147,6 +162,7 @@ class App extends Component {
             inputChanged={this.onInputHandler}
             deleteTransaction={this.onDeleteTransaction}
             toggleSwitch={this.onToggleSwitch}
+            onEdit={this.onEdit}
           />
         </Layout>
       </React.Fragment>

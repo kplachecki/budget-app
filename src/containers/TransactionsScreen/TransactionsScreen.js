@@ -16,6 +16,9 @@ const TransactionsScreen = props => {
         deleteTransaction={() => props.deleteTransaction(index)}
         toggleSwitch={() => props.toggleSwitch(index)}
         date={transaction.date}
+        index={index}
+        onEdit={() => props.onEdit(index)}
+        isEditable={transaction.isEditable}
       />
     );
   });
