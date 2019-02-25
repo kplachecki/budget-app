@@ -8,7 +8,22 @@ const TRANSACTION = {
   toggle: false,
   shareWith: "",
   date: null,
-  isEditable: false
+  isEditable: true,
+  transactionContributors: [
+    {
+      name: "",
+      value: "",
+      isReturned: false,
+      contributorIsEditable: true
+    }
+  ]
+};
+
+const CONTRIBUTORS = {
+  name: "",
+  value: "",
+  isReturned: false,
+  contributorIsEditable: true
 };
 
 class App extends Component {
@@ -20,7 +35,21 @@ class App extends Component {
         toggle: false,
         shareWith: "",
         date: null,
-        isEditable: false
+        isEditable: true,
+        transactionContributors: [
+          {
+            name: "",
+            value: "",
+            isReturned: false,
+            contributorIsEditable: true
+          }
+        ]
+      }
+    ],
+    contributors: [
+      {
+        name: "",
+        value: ""
       }
     ],
     budget: null
@@ -32,6 +61,27 @@ class App extends Component {
 
   //   }
   // }
+
+  onReturnedContributor = (index, contributorIndex) => {
+    const transaction = [...this.state.transactions];
+
+    transaction[index].transactionContributors[
+      contributorIndex
+    ].isReturned = !transaction[index].transactionContributors[contributorIndex]
+      .isReturned;
+    this.setState({ transactions: transaction });
+  };
+
+  onEditContributor = (index, contributorIndex) => {
+    const transaction = [...this.state.transactions];
+
+    transaction[index].transactionContributors[
+      contributorIndex
+    ].contributorIsEditable = !transaction[index].transactionContributors[
+      contributorIndex
+    ].contributorIsEditable;
+    this.setState({ transactions: transaction });
+  };
 
   onEdit = index => {
     const transaction = [...this.state.transactions];
@@ -96,9 +146,30 @@ class App extends Component {
 
     transaction.unshift(defaultTransaction);
     this.setState({ transactions: transaction }, () => {
+      this.onEdit(1);
       this.transactionDate();
       this.budgetAdd();
     });
+  };
+
+  onAddContributor = index => {
+    const defaultContributor = { ...CONTRIBUTORS };
+    const transaction = [...this.state.transactions];
+
+    transaction[index].transactionContributors.unshift(defaultContributor);
+    this.setState({ transactions: transaction }, () => {
+      this.onEditContributor(index, 1);
+    });
+  };
+
+  onDeleteContributor = (index, contributorIndex) => {
+    const transaction = [...this.state.transactions];
+
+    if (transaction[index].transactionContributors.length <= 1) {
+      return;
+    }
+    transaction[index].transactionContributors.splice(contributorIndex, 1);
+    this.setState({ transactions: transaction });
   };
 
   onDeleteTransaction = index => {
@@ -110,6 +181,19 @@ class App extends Component {
     this.budgetDeduction(index);
     transaction.splice(index, 1);
     this.setState({ transactions: transaction });
+  };
+
+  onInputContributor = (event, index, contributorIndex) => {
+    const transaction = [...this.state.transactions];
+    const currentContributor =
+      transaction[index].transactionContributors[contributorIndex];
+
+    const newContributor = event.target.value;
+
+    currentContributor.name = newContributor;
+    this.setState({
+      transactions: transaction
+    });
   };
 
   onInputHandler = (event, index) => {
@@ -136,16 +220,6 @@ class App extends Component {
           transactions: transaction
         });
       }
-    } else if (event.target.name === "shareWithInput") {
-      const newShareWith = event.target.value;
-      const prevShareWith = currentTransaction.shareWith;
-
-      if (prevShareWith !== newShareWith) {
-        currentTransaction.shareWith = newShareWith;
-        this.setState({
-          transactions: transaction
-        });
-      }
     }
   };
 
@@ -163,6 +237,11 @@ class App extends Component {
             deleteTransaction={this.onDeleteTransaction}
             toggleSwitch={this.onToggleSwitch}
             onEdit={this.onEdit}
+            onInputContributor={this.onInputContributor}
+            onAddContributor={this.onAddContributor}
+            onEditContributor={this.onEditContributor}
+            onReturnedContributor={this.onReturnedContributor}
+            onDeleteContributor={this.onDeleteContributor}
           />
         </Layout>
       </React.Fragment>

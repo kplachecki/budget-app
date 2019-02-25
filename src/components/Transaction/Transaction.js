@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import TransactionDate from "./TransactionDate/TransactionDate";
 import DeleteButton from "./DeleteButton/DeleteButton";
 import Editbutton from "./EditButton/EditButton";
+import Contributors from "./Contributors/Contributors";
 
 class Transaction extends Component {
   render() {
@@ -41,20 +42,6 @@ class Transaction extends Component {
       );
     }
 
-    let toggleContent = (
-      <Toggle
-        toggleSwitch={this.props.toggleSwitch}
-        toggle={this.props.toggle}
-        inputChanged={this.props.inputChanged}
-        isEditable={this.props.isEditable}
-        index={this.props.index}
-        shareWith={this.props.shareWith}
-      />
-    );
-    if (this.props.index !== 0 && this.props.shareWith.length === 0) {
-      toggleContent = null;
-    }
-
     return (
       <React.Fragment>
         {line}
@@ -70,7 +57,25 @@ class Transaction extends Component {
             index={this.props.index}
           />
           {transactionContent}
-          {toggleContent}
+
+          <Toggle
+            toggleSwitch={this.props.toggleSwitch}
+            isEditable={this.props.isEditable}
+            index={this.props.index}
+          />
+          <Contributors
+            transactionContributors={this.props.transactionContributors}
+            index={this.props.index}
+            shareWith={this.props.shareWith}
+            inputChanged={this.props.inputChanged}
+            isEditable={this.props.isEditable}
+            toggle={this.props.toggle}
+            onInputContributor={this.props.onInputContributor}
+            onAddContributor={this.props.onAddContributor}
+            onEditContributor={this.props.onEditContributor}
+            onReturnedContributor={this.props.onReturnedContributor}
+            onDeleteContributor={this.props.onDeleteContributor}
+          />
         </div>
       </React.Fragment>
     );
