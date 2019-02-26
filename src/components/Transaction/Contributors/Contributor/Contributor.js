@@ -52,7 +52,7 @@ class Contributor extends Component {
 
     return (
       <React.Fragment>
-        {extension}{" "}
+        {extension}
         <EditButton
           contributorIsEditable={this.props.contributorIsEditable}
           contributorIndex={this.props.contributorIndex}
