@@ -2,45 +2,6 @@ import React, { Component } from "react";
 import classes from "./Toggle.module.css";
 class Toggle extends Component {
   render() {
-    let extension = null;
-
-    if (this.props.index === 0 && this.props.toggle) {
-      extension = (
-        <div className={classes.Input}>
-          <input
-            name="shareWithInput"
-            placeholder="Shared with"
-            value={this.props.shareWith}
-            onChange={this.props.inputChanged}
-          />
-        </div>
-      );
-    }
-    if (this.props.isEditable && this.props.toggle) {
-      extension = (
-        <div className={classes.Input}>
-          <input
-            name="shareWithInput"
-            placeholder="Shared with"
-            value={this.props.shareWith}
-            onChange={this.props.inputChanged}
-          />
-        </div>
-      );
-    }
-
-    if (
-      this.props.index !== 0 &&
-      this.props.toggle &&
-      this.props.isEditable === false
-    ) {
-      extension = (
-        <div className={classes.Input}>
-          <p>Bill shared with {this.props.shareWith}</p>
-        </div>
-      );
-    }
-
     let shareBill = null;
 
     if (this.props.index === 0 || this.props.isEditable) {
@@ -52,12 +13,7 @@ class Toggle extends Component {
       );
     }
 
-    return (
-      <React.Fragment>
-        {shareBill}
-        {extension}
-      </React.Fragment>
-    );
+    return <React.Fragment>{shareBill}</React.Fragment>;
   }
 }
 

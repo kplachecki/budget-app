@@ -3,7 +3,7 @@ import Transaction from "../../components/Transaction/Transaction";
 
 const TransactionsScreen = props => {
   const currentTransaction = [...props.transactions];
-
+  console.log(currentTransaction);
   const transactions = currentTransaction.map((transaction, index) => {
     return (
       <Transaction
@@ -19,6 +19,12 @@ const TransactionsScreen = props => {
         index={index}
         onEdit={() => props.onEdit(index)}
         isEditable={transaction.isEditable}
+        transactionContributors={transaction.transactionContributors}
+        onInputContributor={props.onInputContributor}
+        onAddContributor={props.onAddContributor}
+        onEditContributor={props.onEditContributor}
+        onReturnedContributor={props.onReturnedContributor}
+        onDeleteContributor={props.onDeleteContributor}
       />
     );
   });
