@@ -25,8 +25,15 @@ class Contributor extends Component {
       extension = (
         <div className={classes.ContributorInput}>
           <input
+            type="number"
+            value={this.props.value}
+            placeholder={this.props.defaultValue}
+            className={classes.valueInput}
+            // onChange={this.props.onInputHandler}
+          />
+          <input
             name="shareWithInput"
-            placeholder="Shared with"
+            placeholder="Name"
             value={this.props.name}
             onChange={event =>
               this.props.onInputContributor(
@@ -35,7 +42,7 @@ class Contributor extends Component {
                 this.props.contributorIndex
               )
             }
-            className={classes.Input}
+            className={classes.nameInput}
           />
           {addButton}
         </div>
@@ -47,7 +54,11 @@ class Contributor extends Component {
       this.props.toggle &&
       this.props.contributorIsEditable === false
     ) {
-      extension = <p>Bill shared with {this.props.name} </p>;
+      extension = (
+        <p>
+          {this.props.name} owns you {this.props.defaultValue}
+        </p>
+      );
     }
 
     return (

@@ -12,6 +12,7 @@ const TRANSACTION = {
   transactionContributors: [
     {
       name: "",
+      defaultValue: 0,
       value: "",
       isReturned: false,
       contributorIsEditable: true
@@ -21,6 +22,7 @@ const TRANSACTION = {
 
 const CONTRIBUTORS = {
   name: "",
+  defaultValue: 0,
   value: "",
   isReturned: false,
   contributorIsEditable: true
@@ -39,6 +41,7 @@ class App extends Component {
         transactionContributors: [
           {
             name: "",
+            defaultValue: 0,
             value: "",
             isReturned: false,
             contributorIsEditable: true
@@ -52,7 +55,8 @@ class App extends Component {
         value: ""
       }
     ],
-    budget: null
+    budget: null,
+    notReturned: null
   };
 
   // inputValidation = (event) => {
@@ -61,6 +65,36 @@ class App extends Component {
 
   //   }
   // }
+
+  // const arr = transaction[index].transactionContributors.map(contributor => {
+  //   return contributor.defaultValue;
+  // });
+  // console.log(arr);
+
+  // notReturnedAddition = () => {
+  //   const transaction = [...this.state.transactions];
+  //   const arr = transaction[0].transactionContributors.map(contributor => {
+  //     return contributor.defaultValue;
+  //   });
+  //   console.log(arr);
+  // };
+
+  // onContributorValue = (index, contributorIndex) => {
+  //   const transaction = [...this.state.transactions];
+
+  //   const transactionValue = transaction[index].amount;
+  //   const divider = transaction[index].transactionContributors.length;
+
+  //   for (let i = 1; i < divider; i++) {
+  //     transaction[index].transactionContributors[i].defaultValue = (
+  //       transactionValue / divider
+  //     ).toFixed(2);
+  //   }
+  //   transaction[index].transactionContributors[0].defaultValue =
+  //     transactionValue / (divider + 1);
+
+  //   this.setState({ transactions: transaction });
+  // };
 
   onReturnedContributor = (index, contributorIndex) => {
     const transaction = [...this.state.transactions];
@@ -94,7 +128,7 @@ class App extends Component {
     const currentTransaction = transaction[index];
     const currentBudget = this.state.budget;
 
-    const newBudget = currentBudget + Number(currentTransaction.amount);
+    const newBudget = currentBudget + currentTransaction.amount;
     this.setState({ budget: newBudget });
   };
 
@@ -149,6 +183,7 @@ class App extends Component {
       this.onEdit(1);
       this.transactionDate();
       this.budgetAdd();
+      // this.notReturnedAddition();
     });
   };
 
@@ -159,6 +194,7 @@ class App extends Component {
     transaction[index].transactionContributors.unshift(defaultContributor);
     this.setState({ transactions: transaction }, () => {
       this.onEditContributor(index, 1);
+      // this.onContributorValue(index);
     });
   };
 
@@ -169,7 +205,10 @@ class App extends Component {
       return;
     }
     transaction[index].transactionContributors.splice(contributorIndex, 1);
-    this.setState({ transactions: transaction });
+    this.setState(
+      { transactions: transaction }
+      // this.onContributorValue(index)
+    );
   };
 
   onDeleteTransaction = index => {
@@ -211,14 +250,17 @@ class App extends Component {
         });
       }
     } else if (event.target.name === "amountInput") {
-      const newAmount = event.target.value;
+      const newAmount = Number(event.target.value);
       const prevAmount = currentTransaction.amount;
 
       if (prevAmount !== newAmount) {
         currentTransaction.amount = newAmount;
-        this.setState({
-          transactions: transaction
-        });
+        this.setState(
+          {
+            transactions: transaction
+          }
+          // () => this.onContributorValue(index)
+        );
       }
     }
   };

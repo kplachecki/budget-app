@@ -9,6 +9,8 @@ const Contributors = props => {
       return (
         <Contributor
           name={contributor.name}
+          value={contributor.value}
+          defaultValue={contributor.defaultValue}
           key={"contributor " + contributorIndex}
           contributorIndex={contributorIndex}
           index={props.index}

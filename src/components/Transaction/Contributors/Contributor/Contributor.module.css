@@ -4,6 +4,9 @@
   margin-top: 10px;
 }
 
-.Input {
+.nameInput {
   width: 50%;
+}
+.valueInput {
+  width: 20%;
 }
