@@ -2,30 +2,29 @@ import React, { Component } from "react";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
 import Layout from "./components/Layout/Layout";
 
-const TRANSACTION = {
-  amount: "",
-  description: "",
-  toggle: false,
-  shareWith: "",
-  date: null,
-  isEditable: true,
-  transactionContributors: [
-    {
-      name: "",
-      defaultValue: 0,
-      value: "",
-      isReturned: false,
-      contributorIsEditable: true
-    }
-  ]
-};
-
 const CONTRIBUTORS = {
   name: "",
   defaultValue: 0,
   value: "",
   isReturned: false,
   contributorIsEditable: true
+};
+
+const CONTRIBUTORS2 = {
+  name: "",
+  defaultValue: 0,
+  value: "",
+  isReturned: false,
+  contributorIsEditable: true
+};
+
+const TRANSACTION = {
+  amount: "",
+  description: "",
+  toggle: false,
+  date: null,
+  isEditable: true,
+  transactionContributors: []
 };
 
 class App extends Component {
@@ -35,7 +34,6 @@ class App extends Component {
         amount: "",
         description: "",
         toggle: false,
-        shareWith: "",
         date: null,
         isEditable: true,
         transactionContributors: [
@@ -183,6 +181,8 @@ class App extends Component {
       this.onEdit(1);
       this.transactionDate();
       this.budgetAdd();
+      // transaction[0].transactionContributors.unshift({ ...CONTRIBUTORS2 });
+      // this.setState({ transactions: transaction });
       // this.notReturnedAddition();
     });
   };

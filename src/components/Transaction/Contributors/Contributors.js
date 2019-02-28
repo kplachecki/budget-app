@@ -3,7 +3,6 @@ import Contributor from "./Contributor/Contributor";
 
 const Contributors = props => {
   const currentContributors = [...props.transactionContributors];
-  console.log(currentContributors);
   const contributors = currentContributors.map(
     (contributor, contributorIndex) => {
       return (

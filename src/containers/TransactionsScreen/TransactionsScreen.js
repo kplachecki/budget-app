@@ -10,7 +10,6 @@ const TransactionsScreen = props => {
         amount={transaction.amount}
         description={transaction.description}
         toggle={transaction.toggle}
-        shareWith={transaction.shareWith}
         key={"transaction " + index}
         inputChanged={event => props.inputChanged(event, index)}
         deleteTransaction={() => props.deleteTransaction(index)}
