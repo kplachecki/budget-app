@@ -68,18 +68,19 @@ class App extends Component {
       return contributor.defaultValue;
     });
     arr[0] = 0;
-    const sum = arr.reduce((a, b) => a + b);
-    transaction[index].sharedAmount = sum;
+    const updatedSharedAmount = arr.reduce((a, b) => a + b);
+    transaction[index].sharedAmount = updatedSharedAmount;
 
     this.setState({ transactions: transaction }, () =>
-      this.notReturnedManipulation(oldSharedAmount, sum)
+      this.notReturnedManipulation(oldSharedAmount, updatedSharedAmount)
     );
   };
 
-  notReturnedManipulation = (oldSharedAmount, sum) => {
+  notReturnedManipulation = (oldSharedAmount, updatedSharedAmount) => {
     const oldNotReturned = this.state.notReturned;
 
-    const newNotReturned = oldNotReturned - oldSharedAmount + sum;
+    const newNotReturned =
+      oldNotReturned - oldSharedAmount + updatedSharedAmount;
     this.setState({ notReturned: newNotReturned });
   };
 
@@ -105,17 +106,19 @@ class App extends Component {
   //change contributor if value was returned and update notReturned state value
   onReturnedContributor = (index, contributorIndex) => {
     const transaction = [...this.state.transactions];
-    const currentNotReturned = this.state.notReturned;
+    const oldSharedAmount = transaction[index].sharedAmount;
     const currentContributor =
       transaction[index].transactionContributors[contributorIndex];
 
     currentContributor.isReturned = !currentContributor.isReturned;
 
     if (currentContributor.isReturned) {
-      const newNotReturned =
-        currentNotReturned - currentContributor.defaultValue;
-      this.setState({ notReturned: newNotReturned });
+      const updatedSharedAmount =
+        oldSharedAmount - currentContributor.defaultValue;
+      transaction[index].sharedAmount = updatedSharedAmount;
+      this.notReturnedManipulation(oldSharedAmount, updatedSharedAmount);
     }
+
     this.setState({ transactions: transaction });
   };
 
@@ -231,11 +234,14 @@ class App extends Component {
 
   onDeleteTransaction = index => {
     const transaction = [...this.state.transactions];
+    const sharedAmount = transaction[index].sharedAmount;
+    const notReturned = this.state.notReturned;
 
     if (transaction.length <= 1) {
       return;
     }
     this.budgetDeduction(index);
+    this.setState({ notReturned: notReturned - sharedAmount });
     transaction.splice(index, 1);
     this.setState({ transactions: transaction });
   };

@@ -17,6 +17,7 @@ class ReturnedButton extends Component {
             )
           }
           className={returnedArr.join(" ")}
+          disabled={this.props.isReturned}
         >
           {returnedStr}
         </button>
