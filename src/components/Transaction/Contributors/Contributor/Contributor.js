@@ -71,6 +71,7 @@ class Contributor extends Component {
           index={this.props.index}
           isEditable={this.props.isEditable}
           toggle={this.props.toggle}
+          isReturned={this.props.isReturned}
         />
         <ReturnedButton
           contributorIndex={this.props.contributorIndex}
@@ -84,6 +85,7 @@ class Contributor extends Component {
           index={this.props.index}
           toggle={this.props.toggle}
           onDeleteContributor={this.props.onDeleteContributor}
+          isReturned={this.props.isReturned}
         />
       </React.Fragment>
     );

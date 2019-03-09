@@ -16,7 +16,8 @@ class EditButton extends Component {
     if (
       this.props.contributorIndex !== 0 &&
       this.props.isEditable &&
-      this.props.toggle
+      this.props.toggle &&
+      this.props.isReturned === false
     ) {
       editButton = (
         <button

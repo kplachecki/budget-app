@@ -3,7 +3,6 @@ import Transaction from "../../components/Transaction/Transaction";
 
 const TransactionsScreen = props => {
   const currentTransaction = [...props.transactions];
-  console.log(currentTransaction);
   const transactions = currentTransaction.map((transaction, index) => {
     return (
       <Transaction
