@@ -21,6 +21,7 @@ class Transaction extends Component {
           value={this.props.amount}
           onChange={this.props.inputChanged}
           className={classes.InputLeft}
+          required
         />
         <input
           name="descriptionInput"
@@ -28,6 +29,7 @@ class Transaction extends Component {
           value={this.props.description}
           onChange={this.props.inputChanged}
           className={classes.InputRight}
+          required
         />
       </div>
     );

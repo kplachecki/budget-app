@@ -229,12 +229,26 @@ class App extends Component {
     const defaultContributor = { ...CONTRIBUTORS };
     const transaction = [...this.state.transactions];
 
-    transaction[index].transactionContributors.unshift(defaultContributor);
-    this.setState({ transactions: transaction }, () => {
-      this.onEditContributor(index, 1);
-      this.onContributorValue(index);
-      this.sharedAmountManipulation(index);
+    const arr = transaction[index].transactionContributors.map(contributor => {
+      return contributor.defaultValue;
     });
+    const totalTransactionValue = arr.reduce((a, b) => a + b);
+    const firstContributorValue =
+      transaction[index].transactionContributors[0].value;
+
+    if (
+      totalTransactionValue > transaction[index].amount ||
+      firstContributorValue > transaction[index].amount
+    ) {
+      return;
+    } else {
+      transaction[index].transactionContributors.unshift(defaultContributor);
+      this.setState({ transactions: transaction }, () => {
+        this.onEditContributor(index, 1);
+        this.onContributorValue(index);
+        this.sharedAmountManipulation(index);
+      });
+    }
   };
 
   onDeleteContributor = (index, contributorIndex) => {
@@ -314,6 +328,8 @@ class App extends Component {
       }
     }
   };
+
+  onBlurTransactions = transaction => {};
 
   render() {
     return (
