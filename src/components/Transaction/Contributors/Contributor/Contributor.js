@@ -20,19 +20,47 @@ class Contributor extends Component {
     if (
       this.props.toggle &&
       this.props.isEditable &&
-      (this.props.contributorIndex === 0 || this.props.contributorIsEditable)
+      this.props.contributorIndex === 0
     ) {
       extension = (
         <div className={classes.ContributorInput}>
           <input
+            name="contributorValue"
             type="number"
             value={this.props.value}
             placeholder={this.props.defaultValue}
             className={classes.valueInput}
-            // onChange={this.props.onInputHandler}
+            onChange={event =>
+              this.props.onInputContributor(
+                event,
+                this.props.index,
+                this.props.contributorIndex
+              )
+            }
           />
           <input
-            name="shareWithInput"
+            name="contributorName"
+            placeholder="Name"
+            value={this.props.name}
+            onChange={event =>
+              this.props.onInputContributor(
+                event,
+                this.props.index,
+                this.props.contributorIndex
+              )
+            }
+            className={classes.nameInput}
+          />
+          {addButton}
+        </div>
+      );
+    }
+    if (this.props.contributorIsEditable && this.props.contributorIndex !== 0) {
+      extension = (
+        <div className={classes.ContributorInput}>
+          <span>{this.props.defaultValue}</span>
+          <input
+            name="contributorName"
             placeholder="Name"
             value={this.props.name}
             onChange={event =>
@@ -57,6 +85,13 @@ class Contributor extends Component {
       extension = (
         <p>
           {this.props.name} owns you {this.props.defaultValue}
+        </p>
+      );
+    }
+    if (this.props.isReturned) {
+      extension = (
+        <p>
+          {this.props.name} returned {this.props.defaultValue}
         </p>
       );
     }
