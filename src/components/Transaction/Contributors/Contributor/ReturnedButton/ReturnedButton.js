@@ -7,7 +7,11 @@ class ReturnedButton extends Component {
     const returnedStr = this.props.isReturned ? "Returned" : "Not Returned";
 
     let returnedButton = null;
-    if (this.props.contributorIndex !== 0 && this.props.toggle) {
+    if (
+      this.props.contributorIndex !== 0 &&
+      this.props.toggle &&
+      this.props.index !== 0
+    ) {
       returnedButton = (
         <button
           onClick={() =>
@@ -17,6 +21,7 @@ class ReturnedButton extends Component {
             )
           }
           className={returnedArr.join(" ")}
+          disabled={this.props.isReturned}
         >
           {returnedStr}
         </button>

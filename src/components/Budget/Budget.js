@@ -7,6 +7,7 @@ const budget = props => (
       Provide your Budget: <input onChange={props.budgetChange} />
     </span>
     <p>Money Left: {props.budget} </p>
+    <p>Pending for return: {props.notReturned}</p>
   </div>
 );
 

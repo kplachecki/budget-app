@@ -9,6 +9,7 @@ const layout = props => (
       <Budget
         budgetChange={event => props.budgetChange(event)}
         budget={props.budget}
+        notReturned={props.notReturned}
       />
       {props.children}
       <button onClick={props.addTransaction}>Add</button>

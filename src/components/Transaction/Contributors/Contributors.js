@@ -3,12 +3,13 @@ import Contributor from "./Contributor/Contributor";
 
 const Contributors = props => {
   const currentContributors = [...props.transactionContributors];
-  console.log(currentContributors);
   const contributors = currentContributors.map(
     (contributor, contributorIndex) => {
       return (
         <Contributor
           name={contributor.name}
+          value={contributor.value}
+          defaultValue={contributor.defaultValue}
           key={"contributor " + contributorIndex}
           contributorIndex={contributorIndex}
           index={props.index}
