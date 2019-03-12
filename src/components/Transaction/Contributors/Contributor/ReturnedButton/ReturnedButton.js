@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import classes from "./ReturnedButton.module.css";
+import { Switch, Icon } from "antd";
 
 class ReturnedButton extends Component {
   render() {
-    const returnedArr = this.props.isReturned ? [classes.Returned] : [];
+    const returnedCol = this.props.isReturned ? "#52c41a" : "red";
     const returnedStr = this.props.isReturned ? "Returned" : "Not Returned";
 
     let returnedButton = null;
@@ -13,18 +14,18 @@ class ReturnedButton extends Component {
       this.props.index !== 0
     ) {
       returnedButton = (
-        <button
+        <Switch
           onClick={() =>
             this.props.onReturnedContributor(
               this.props.index,
               this.props.contributorIndex
             )
           }
-          className={returnedArr.join(" ")}
+          checkedChildren={returnedStr}
+          unCheckedChildren={returnedStr}
           disabled={this.props.isReturned}
-        >
-          {returnedStr}
-        </button>
+          style={{ backgroundColor: returnedCol }}
+        />
       );
     }
     return <React.Fragment>{returnedButton}</React.Fragment>;

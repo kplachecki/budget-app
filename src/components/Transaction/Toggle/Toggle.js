@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import classes from "./Toggle.module.css";
+import { Switch } from "antd";
 class Toggle extends Component {
   render() {
     let shareBill = null;
@@ -8,7 +9,10 @@ class Toggle extends Component {
       shareBill = (
         <div className={classes.SharedBill}>
           <span>Share bill</span>
-          <button onClick={this.props.toggleSwitch}>Toggle Button</button>
+          <Switch
+            onClick={this.props.toggleSwitch}
+            checked={this.props.toggle}
+          />
         </div>
       );
     }

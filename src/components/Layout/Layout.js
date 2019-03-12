@@ -1,10 +1,10 @@
 import React from "react";
 import classes from "./Layout.module.css";
 import Budget from "../Budget/Budget";
+import { Button } from "antd";
 
 const layout = props => (
   <React.Fragment>
-    <div>Toolbar, SideDrawe, Backdrop</div>
     <main className={classes.Content}>
       <Budget
         budgetChange={event => props.budgetChange(event)}
@@ -12,7 +12,14 @@ const layout = props => (
         notReturned={props.notReturned}
       />
       {props.children}
-      <button onClick={props.addTransaction}>Add</button>
+      <Button
+        size="default"
+        shape="circle"
+        type="primary"
+        icon="plus"
+        onClick={props.addTransaction}
+        className={classes.AddButton}
+      />
     </main>
   </React.Fragment>
 );

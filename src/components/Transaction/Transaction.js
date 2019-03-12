@@ -6,31 +6,32 @@ import TransactionDate from "./TransactionDate/TransactionDate";
 import DeleteButton from "./DeleteButton/DeleteButton";
 import Editbutton from "./EditButton/EditButton";
 import Contributors from "./Contributors/Contributors";
+import { Input } from "antd";
 
 class Transaction extends Component {
   render() {
     const line =
-      this.props.date != null ? <hr style={{ width: "50%" }} /> : null;
+      this.props.date != null ? <hr style={{ width: "60%" }} /> : null;
 
     let transactionContent = (
       <div className={classes.Input}>
-        <input
-          name="amountInput"
-          placeholder="0"
-          type="number"
-          value={this.props.amount}
-          onChange={this.props.inputChanged}
-          className={classes.InputLeft}
-          required
-        />
-        <input
-          name="descriptionInput"
-          placeholder="description"
-          value={this.props.description}
-          onChange={this.props.inputChanged}
-          className={classes.InputRight}
-          required
-        />
+        <Input.Group compact>
+          <Input
+            name="amountInput"
+            placeholder="Amount"
+            type="number"
+            value={this.props.amount}
+            onChange={this.props.inputChanged}
+            style={{ width: "30%" }}
+          />
+          <Input
+            name="descriptionInput"
+            placeholder="Transaction description"
+            value={this.props.description}
+            onChange={this.props.inputChanged}
+            style={{ width: "70%" }}
+          />
+        </Input.Group>
       </div>
     );
 
@@ -38,7 +39,8 @@ class Transaction extends Component {
       transactionContent = (
         <div className={classes.Input}>
           <p>
-            {this.props.amount} <span>{this.props.description}</span>
+            Transaction value is {this.props.amount}, described as "
+            {this.props.description}"
           </p>
         </div>
       );
@@ -64,6 +66,7 @@ class Transaction extends Component {
             toggleSwitch={this.props.toggleSwitch}
             isEditable={this.props.isEditable}
             index={this.props.index}
+            toggle={this.props.toggle}
           />
           <Contributors
             transactionContributors={this.props.transactionContributors}
