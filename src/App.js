@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
 import Layout from "./components/Layout/Layout";
+import "antd/dist/antd.css";
 
 const CONTRIBUTORS = {
   name: "",

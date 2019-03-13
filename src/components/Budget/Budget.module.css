@@ -1,9 +1,10 @@
 .Budget {
-  width: 40%;
-  max-width: 450px;
-  min-height: 80px;
-  border: 1px solid gray;
+  width: 80%;
+  border: 1px solid #1890ff;
   margin: 10px auto;
   padding: 10px;
-  box-shadow: 0 2px 3px lightgray;
+  box-shadow: 0 2px 3px #188fffaf;
+}
+.Input {
+  width: 50%;
 }

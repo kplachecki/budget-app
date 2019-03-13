@@ -3,6 +3,7 @@ import classes from "./Contributor.module.css";
 import EditButton from "./EditButton/EditButton";
 import ReturnedButton from "./ReturnedButton/ReturnedButton";
 import DeleteButton from "./DeleteButton/DeleteButton";
+import { Button, Input } from "antd";
 
 class Contributor extends Component {
   render() {
@@ -10,9 +11,14 @@ class Contributor extends Component {
 
     if (this.props.contributorIndex === 0) {
       addButton = (
-        <button onClick={() => this.props.onAddContributor(this.props.index)}>
+        <Button
+          size="small"
+          type="primary"
+          shape="round"
+          onClick={() => this.props.onAddContributor(this.props.index)}
+        >
           Add
-        </button>
+        </Button>
       );
     }
     let extension = null;
@@ -24,33 +30,35 @@ class Contributor extends Component {
     ) {
       extension = (
         <div className={classes.ContributorInput}>
-          <input
-            name="contributorValue"
-            type="number"
-            value={this.props.value}
-            placeholder={this.props.defaultValue}
-            className={classes.valueInput}
-            onChange={event =>
-              this.props.onInputContributor(
-                event,
-                this.props.index,
-                this.props.contributorIndex
-              )
-            }
-          />
-          <input
-            name="contributorName"
-            placeholder="Name"
-            value={this.props.name}
-            onChange={event =>
-              this.props.onInputContributor(
-                event,
-                this.props.index,
-                this.props.contributorIndex
-              )
-            }
-            className={classes.nameInput}
-          />
+          <Input.Group>
+            <Input
+              name="contributorValue"
+              type="number"
+              value={this.props.value}
+              placeholder={this.props.defaultValue}
+              style={{ width: "30%" }}
+              onChange={event =>
+                this.props.onInputContributor(
+                  event,
+                  this.props.index,
+                  this.props.contributorIndex
+                )
+              }
+            />
+            <Input
+              name="contributorName"
+              placeholder="Contributor name"
+              value={this.props.name}
+              onChange={event =>
+                this.props.onInputContributor(
+                  event,
+                  this.props.index,
+                  this.props.contributorIndex
+                )
+              }
+              style={{ width: "70%" }}
+            />
+          </Input.Group>
           {addButton}
         </div>
       );
