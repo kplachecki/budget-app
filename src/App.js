@@ -13,6 +13,7 @@ const CONTRIBUTORS = {
 
 const TRANSACTION = {
   amount: "",
+  prevAmount: 0,
   description: "",
   toggle: false,
   date: null,
@@ -26,6 +27,7 @@ class App extends Component {
     transactions: [
       {
         amount: "",
+        prevAmount: 0,
         description: "",
         toggle: false,
         date: null,
@@ -155,7 +157,18 @@ class App extends Component {
 
   onEdit = index => {
     const transaction = [...this.state.transactions];
+    const prevAmount = transaction[index].prevAmount;
+    const newAmount = transaction[index].amount;
+    const budget = this.state.budget;
+
+    if (transaction[index].isEditable === false) {
+      transaction[index].prevAmount = transaction[index].amount;
+    }
+    if (transaction[index].isEditable && prevAmount !== newAmount) {
+      this.setState({ budget: budget + prevAmount - newAmount });
+    }
     transaction[index].isEditable = !transaction[index].isEditable;
+
     this.setState({ transactions: transaction });
   };
 
@@ -164,8 +177,15 @@ class App extends Component {
     const currentTransaction = transaction[index];
     const currentBudget = this.state.budget;
 
+    const arr = currentTransaction.transactionContributors.map(contributor => {
+      return contributor.defaultValue;
+    });
+    arr[0] = 0;
+    const updatedAmount = arr.reduce((a, b) => a + b);
+    currentTransaction.amount = currentTransaction.amount - updatedAmount;
+
     const newBudget = currentBudget + currentTransaction.amount;
-    this.setState({ budget: newBudget });
+    this.setState({ budget: Number(newBudget.toFixed(2)) });
   };
 
   budgetAdd = () => {
@@ -300,33 +320,36 @@ class App extends Component {
     }
   };
 
-  onInputHandler = (event, index) => {
+  onDescriptionInputHandler = (event, index) => {
     const transaction = [...this.state.transactions];
     const currentTransaction = transaction[index];
 
-    if (event.target.name === "descriptionInput") {
-      const newDescription = event.target.value;
-      const prevDescription = currentTransaction.description;
+    const newDescription = event.target.value;
+    const prevDescription = currentTransaction.description;
 
-      if (prevDescription !== newDescription) {
-        currentTransaction.description = newDescription;
-        this.setState({
+    if (prevDescription !== newDescription) {
+      currentTransaction.description = newDescription;
+      this.setState({
+        transactions: transaction
+      });
+    }
+  };
+
+  onAmountInputHandler = (event, index) => {
+    const transaction = [...this.state.transactions];
+    const currentTransaction = transaction[index];
+
+    const newAmount = Number(event.target.value);
+    const prevAmount = currentTransaction.amount;
+
+    if (prevAmount !== newAmount) {
+      currentTransaction.amount = newAmount;
+      this.setState(
+        {
           transactions: transaction
-        });
-      }
-    } else if (event.target.name === "amountInput") {
-      const newAmount = Number(event.target.value);
-      const prevAmount = currentTransaction.amount;
-
-      if (prevAmount !== newAmount) {
-        currentTransaction.amount = newAmount;
-        this.setState(
-          {
-            transactions: transaction
-          },
-          () => this.onContributorValue(index)
-        );
-      }
+        },
+        () => this.onContributorValue(index)
+      );
     }
   };
 
@@ -343,7 +366,8 @@ class App extends Component {
         >
           <TransactionsScreen
             transactions={this.state.transactions}
-            inputChanged={this.onInputHandler}
+            amountInputHandler={this.onAmountInputHandler}
+            descriptionInputHandler={this.onDescriptionInputHandler}
             deleteTransaction={this.onDeleteTransaction}
             toggleSwitch={this.onToggleSwitch}
             onEdit={this.onEdit}

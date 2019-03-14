@@ -10,7 +10,10 @@ const TransactionsScreen = props => {
         description={transaction.description}
         toggle={transaction.toggle}
         key={"transaction " + index}
-        inputChanged={event => props.inputChanged(event, index)}
+        amountInputHandler={event => props.amountInputHandler(event, index)}
+        descriptionInputHandler={event =>
+          props.descriptionInputHandler(event, index)
+        }
         deleteTransaction={() => props.deleteTransaction(index)}
         toggleSwitch={() => props.toggleSwitch(index)}
         date={transaction.date}

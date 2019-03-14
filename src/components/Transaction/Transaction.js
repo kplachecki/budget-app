@@ -17,18 +17,16 @@ class Transaction extends Component {
       <div className={classes.Input}>
         <Input.Group compact>
           <Input
-            name="amountInput"
             placeholder="Amount"
             type="number"
             value={this.props.amount}
-            onChange={this.props.inputChanged}
+            onChange={this.props.amountInputHandler}
             style={{ width: "30%" }}
           />
           <Input
-            name="descriptionInput"
             placeholder="Transaction description"
             value={this.props.description}
-            onChange={this.props.inputChanged}
+            onChange={this.props.descriptionInputHandler}
             style={{ width: "70%" }}
           />
         </Input.Group>

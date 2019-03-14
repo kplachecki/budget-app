@@ -63,6 +63,7 @@ class Contributor extends Component {
         </div>
       );
     }
+
     if (this.props.contributorIsEditable && this.props.contributorIndex !== 0) {
       extension = (
         <div className={classes.ContributorInput}>
