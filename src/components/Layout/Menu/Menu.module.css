@@ -1,0 +1,23 @@
+.logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px 24px 16px 0;
+  float: left;
+}
+.BudgetContent {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  background-color: #1890ff;
+  position: fixed;
+  z-index: 1;
+  color: white;
+  font-weight: 500;
+  align-items: center;
+}
+
+.BudgetContent .input {
+  width: 30%;
+  text-align: center;
+}
