@@ -5,8 +5,10 @@ const Contributors = props => {
   const currentContributors = [...props.transactionContributors];
   const contributors = currentContributors.map(
     (contributor, contributorIndex) => {
+      contributor.key = contributorIndex;
       return (
         <Contributor
+          contributors={currentContributors}
           name={contributor.name}
           value={contributor.value}
           defaultValue={contributor.defaultValue}

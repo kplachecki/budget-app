@@ -3,7 +3,8 @@
   max-width: 450px;
   min-height: 80px;
   border: 1px solid #1890ff;
-  margin: 10px auto;
+  border-radius: 15px;
+  margin: 0px auto;
   padding: 10px;
   box-shadow: 0 2px 3px #188fffaf;
 }

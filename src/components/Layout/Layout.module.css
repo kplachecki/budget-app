@@ -2,5 +2,7 @@
   padding-top: 60px;
 }
 .AddButton {
-  float: right;
+  position: fixed;
+  right: 0;
+  bottom: 0;
 }
