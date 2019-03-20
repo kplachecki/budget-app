@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
 import Layout from "./components/Layout/Layout";
+import { Button, Affix } from "antd";
 import "antd/dist/antd.css";
 
 const CONTRIBUTORS = {
+  key: "",
   name: "",
   defaultValue: 0,
   value: "",
@@ -35,6 +37,7 @@ class App extends Component {
         sharedAmount: 0,
         transactionContributors: [
           {
+            key: "",
             name: "",
             defaultValue: 0,
             value: "",
@@ -65,7 +68,6 @@ class App extends Component {
   sharedAmountManipulation = index => {
     const transaction = [...this.state.transactions];
     const oldSharedAmount = transaction[index].sharedAmount;
-    const contributors = [...this.state.contributors];
 
     const arr = transaction[index].transactionContributors.map(contributor => {
       if (contributor.isReturned) {
@@ -76,7 +78,7 @@ class App extends Component {
     });
     arr[0] = 0;
     const updatedSharedAmount = arr.reduce((a, b) => a + b);
-    transaction[index].sharedAmount = updatedSharedAmount;
+    transaction[index].sharedAmount = Number(updatedSharedAmount.toFixed(2));
 
     this.setState({ transactions: transaction }, () =>
       this.notReturnedManipulation(oldSharedAmount, updatedSharedAmount)
@@ -88,7 +90,7 @@ class App extends Component {
 
     const newNotReturned =
       oldNotReturned - oldSharedAmount + updatedSharedAmount;
-    this.setState({ notReturned: newNotReturned });
+    this.setState({ notReturned: Number(newNotReturned.toFixed(2)) });
   };
 
   //calculate actual value for each contributor regard to transaction value
@@ -125,6 +127,7 @@ class App extends Component {
   onReturnedContributor = (index, contributorIndex) => {
     const transaction = [...this.state.transactions];
     const oldSharedAmount = transaction[index].sharedAmount;
+
     const currentContributor =
       transaction[index].transactionContributors[contributorIndex];
     const oldBudget = this.state.budget;
@@ -134,11 +137,11 @@ class App extends Component {
     if (currentContributor.isReturned) {
       const updatedSharedAmount =
         oldSharedAmount - currentContributor.defaultValue;
-      transaction[index].sharedAmount = updatedSharedAmount;
+      transaction[index].sharedAmount = Number(updatedSharedAmount.toFixed(2));
 
       this.notReturnedManipulation(oldSharedAmount, updatedSharedAmount);
       const newBudget = oldBudget + currentContributor.defaultValue;
-      this.setState({ budget: newBudget });
+      this.setState({ budget: Number(newBudget.toFixed(2)) });
     }
 
     this.setState({ transactions: transaction });
@@ -178,13 +181,16 @@ class App extends Component {
     const currentBudget = this.state.budget;
 
     const arr = currentTransaction.transactionContributors.map(contributor => {
-      return contributor.defaultValue;
+      if (contributor.isReturned) {
+        return contributor.defaultValue;
+      } else {
+        return false;
+      }
     });
-    arr[0] = 0;
-    const updatedAmount = arr.reduce((a, b) => a + b);
-    currentTransaction.amount = currentTransaction.amount - updatedAmount;
 
-    const newBudget = currentBudget + currentTransaction.amount;
+    const returnedAmount = arr.reduce((a, b) => a + b);
+    const newBudget =
+      currentBudget + (currentTransaction.amount - returnedAmount);
     this.setState({ budget: Number(newBudget.toFixed(2)) });
   };
 
@@ -210,23 +216,25 @@ class App extends Component {
     const today = new Date();
     const month = today.toLocaleString("pl-pl", { month: "long" });
     transaction[1].date =
-      today.getDate() +
-      " " +
-      month +
-      " " +
-      today.getFullYear() +
-      " " +
-      today.getHours() +
-      ":" +
-      today.getMinutes() +
-      ":" +
-      today.getSeconds();
+      today.getDate() + " " + month + " " + today.getFullYear();
     this.setState({ transactions: transaction });
   };
 
   onToggleSwitch = index => {
     const transaction = [...this.state.transactions];
+    const notReturned = this.state.notReturned;
+
     transaction[index].toggle = !transaction[index].toggle;
+
+    if (transaction[index].toggle === false) {
+      this.setState({
+        notReturned: notReturned - transaction[index].sharedAmount
+      });
+    } else {
+      this.setState({
+        notReturned: notReturned + transaction[index].sharedAmount
+      });
+    }
     this.setState({ transactions: transaction });
   };
 
@@ -258,7 +266,8 @@ class App extends Component {
       transaction[index].transactionContributors[0].value;
 
     if (
-      totalTransactionValue > transaction[index].amount ||
+      totalTransactionValue + firstContributorValue >
+        transaction[index].amount ||
       firstContributorValue > transaction[index].amount
     ) {
       return;
@@ -295,7 +304,9 @@ class App extends Component {
       return;
     }
     this.budgetDeduction(index);
-    this.setState({ notReturned: notReturned - sharedAmount });
+    this.setState({
+      notReturned: Number((notReturned - sharedAmount).toFixed(2))
+    });
     transaction.splice(index, 1);
     this.setState({ transactions: transaction });
   };
@@ -365,6 +376,7 @@ class App extends Component {
           notReturned={this.state.notReturned}
         >
           <TransactionsScreen
+            handleDelete={this.handleDelete}
             transactions={this.state.transactions}
             amountInputHandler={this.onAmountInputHandler}
             descriptionInputHandler={this.onDescriptionInputHandler}

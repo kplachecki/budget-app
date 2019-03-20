@@ -3,19 +3,66 @@ import classes from "./Contributor.module.css";
 import EditButton from "./EditButton/EditButton";
 import ReturnedButton from "./ReturnedButton/ReturnedButton";
 import DeleteButton from "./DeleteButton/DeleteButton";
-import { Button, Input } from "antd";
+import { Button, Input, Table } from "antd";
 
 class Contributor extends Component {
-  render() {
-    let addButton = null;
+  dataColumns = [
+    {
+      title: "Amount",
+      dataIndex: "defaultValue",
+      render: (text, record) => <span>{record.defaultValue + "$"}</span>
+    },
+    {
+      title: "Name",
+      dataIndex: "name"
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      render: (text, record) => (
+        <ReturnedButton
+          contributorIndex={record.key}
+          index={this.props.index}
+          toggle={this.props.toggle}
+          onReturnedContributor={this.props.onReturnedContributor}
+          isReturned={record.isReturned}
+        />
+      )
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: (text, record) => (
+        <DeleteButton
+          contributorIndex={record.key}
+          toggle={this.props.toggle}
+          onDeleteContributor={this.props.onDeleteContributor}
+          index={this.props.index}
+        />
+      )
+    }
+  ];
 
-    if (this.props.contributorIndex === 0) {
+  render() {
+    const {
+      index,
+      contributorIndex,
+      contributors,
+      toggle,
+      isEditable,
+      value,
+      defaultValue,
+      name
+    } = this.props;
+
+    let addButton = null;
+    if (contributorIndex === 0) {
       addButton = (
         <Button
           size="small"
           type="primary"
           shape="round"
-          onClick={() => this.props.onAddContributor(this.props.index)}
+          onClick={() => this.props.onAddContributor(index)}
         >
           Add
         </Button>
@@ -23,38 +70,26 @@ class Contributor extends Component {
     }
     let extension = null;
 
-    if (
-      this.props.toggle &&
-      this.props.isEditable &&
-      this.props.contributorIndex === 0
-    ) {
+    if (toggle && isEditable && contributorIndex === 0) {
       extension = (
         <div className={classes.ContributorInput}>
           <Input.Group>
             <Input
               name="contributorValue"
               type="number"
-              value={this.props.value}
-              placeholder={this.props.defaultValue}
+              value={value}
+              placeholder={defaultValue}
               style={{ width: "30%" }}
               onChange={event =>
-                this.props.onInputContributor(
-                  event,
-                  this.props.index,
-                  this.props.contributorIndex
-                )
+                this.props.onInputContributor(event, index, contributorIndex)
               }
             />
             <Input
               name="contributorName"
               placeholder="Contributor name"
-              value={this.props.name}
+              value={name}
               onChange={event =>
-                this.props.onInputContributor(
-                  event,
-                  this.props.index,
-                  this.props.contributorIndex
-                )
+                this.props.onInputContributor(event, index, contributorIndex)
               }
               style={{ width: "70%" }}
             />
@@ -64,73 +99,38 @@ class Contributor extends Component {
       );
     }
 
-    if (this.props.contributorIsEditable && this.props.contributorIndex !== 0) {
-      extension = (
-        <div className={classes.ContributorInput}>
-          <span>{this.props.defaultValue}</span>
-          <input
-            name="contributorName"
-            placeholder="Name"
-            value={this.props.name}
-            onChange={event =>
-              this.props.onInputContributor(
-                event,
-                this.props.index,
-                this.props.contributorIndex
-              )
-            }
-            className={classes.nameInput}
-          />
-          {addButton}
-        </div>
-      );
-    }
+    const columns = this.dataColumns.map(col => {
+      return {
+        ...col,
+        onCell: record => ({
+          record
+        })
+      };
+    });
 
-    if (
-      this.props.contributorIndex !== 0 &&
-      this.props.toggle &&
-      this.props.contributorIsEditable === false
-    ) {
+    if (contributorIndex === 1 && toggle) {
       extension = (
-        <p>
-          {this.props.name} owns you {this.props.defaultValue}
-        </p>
-      );
-    }
-    if (this.props.isReturned) {
-      extension = (
-        <p>
-          {this.props.name} returned {this.props.defaultValue}
-        </p>
+        <Table
+          dataSource={contributors.slice(1)}
+          columns={columns}
+          size="small"
+          pagination={false}
+        />
       );
     }
 
     return (
       <React.Fragment>
         {extension}
-        <EditButton
+        {/* <EditButton
           contributorIsEditable={this.props.contributorIsEditable}
-          contributorIndex={this.props.contributorIndex}
+          contributorIndex={contributorIndex}
           onEditContributor={this.props.onEditContributor}
-          index={this.props.index}
-          isEditable={this.props.isEditable}
-          toggle={this.props.toggle}
-          isReturned={this.props.isReturned}
-        />
-        <ReturnedButton
-          contributorIndex={this.props.contributorIndex}
-          index={this.props.index}
-          toggle={this.props.toggle}
-          onReturnedContributor={this.props.onReturnedContributor}
-          isReturned={this.props.isReturned}
-        />
-        <DeleteButton
-          contributorIndex={this.props.contributorIndex}
-          index={this.props.index}
-          toggle={this.props.toggle}
-          onDeleteContributor={this.props.onDeleteContributor}
-          isReturned={this.props.isReturned}
-        />
+          index={index}
+          isEditable={isEditable}
+          toggle={toggle}
+          isReturned={isReturned}
+        /> */}
       </React.Fragment>
     );
   }

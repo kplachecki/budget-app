@@ -1,6 +1,6 @@
 import React from "react";
 import classes from "./Layout.module.css";
-import { Button } from "antd";
+import { Button, Affix } from "antd";
 import Menu from "./Menu/Menu";
 
 const layout = props => (
@@ -10,18 +10,16 @@ const layout = props => (
       budget={props.budget}
       notReturned={props.notReturned}
     />
-
-    <div className={classes.Content}>
-      {props.children}
+    <div className={classes.Content}>{props.children}</div>{" "}
+    <Affix style={{ position: "fixed", bottom: "20px", right: "20px" }}>
       <Button
-        size="default"
         shape="circle"
         type="primary"
         icon="plus"
         onClick={props.addTransaction}
-        className={classes.AddButton}
+        size="large"
       />
-    </div>
+    </Affix>
   </React.Fragment>
 );
 

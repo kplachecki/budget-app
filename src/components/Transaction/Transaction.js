@@ -6,12 +6,14 @@ import TransactionDate from "./TransactionDate/TransactionDate";
 import DeleteButton from "./DeleteButton/DeleteButton";
 import Editbutton from "./EditButton/EditButton";
 import Contributors from "./Contributors/Contributors";
-import { Input } from "antd";
+import { Input, Statistic } from "antd";
 
 class Transaction extends Component {
   render() {
     const line =
-      this.props.date != null ? <hr style={{ width: "60%" }} /> : null;
+      this.props.date != null ? (
+        <hr style={{ width: "60%", marginTop: "20px" }} />
+      ) : null;
 
     let transactionContent = (
       <div className={classes.Input}>
@@ -36,10 +38,14 @@ class Transaction extends Component {
     if (this.props.isEditable === false && this.props.index !== 0) {
       transactionContent = (
         <div className={classes.Input}>
-          <p>
-            Transaction value is {this.props.amount}, described as "
-            {this.props.description}"
-          </p>
+          <Statistic
+            title={this.props.description}
+            prefix="$"
+            value={this.props.amount}
+            style={{
+              textAlign: "center"
+            }}
+          />
         </div>
       );
     }
@@ -67,6 +73,7 @@ class Transaction extends Component {
             toggle={this.props.toggle}
           />
           <Contributors
+            handleDelete={this.props.handleDelete}
             transactionContributors={this.props.transactionContributors}
             index={this.props.index}
             inputChanged={this.props.inputChanged}
@@ -84,9 +91,9 @@ class Transaction extends Component {
   }
 }
 
-Transaction.propTypes = {
-  amout: PropTypes.number,
-  description: PropTypes.string
-};
+// Transaction.propTypes = {
+//   amout: PropTypes.number,
+//   description: PropTypes.string
+// };
 
 export default Transaction;

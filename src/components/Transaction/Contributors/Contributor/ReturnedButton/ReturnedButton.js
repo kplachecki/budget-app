@@ -28,7 +28,7 @@ class ReturnedButton extends Component {
         />
       );
     }
-    return <React.Fragment>{returnedButton}</React.Fragment>;
+    return returnedButton;
   }
 }
 
