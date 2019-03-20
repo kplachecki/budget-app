@@ -20,6 +20,7 @@ class EditButton extends Component {
           theme="twoTone"
           onClick={this.props.onEdit}
           className={classes.EditButton}
+          style={{ fontSize: "15px" }}
         />
       );
     }
@@ -31,6 +32,7 @@ class EditButton extends Component {
           twoToneColor="#52c41a"
           onClick={this.props.onEdit}
           className={classes.EditButton}
+          style={{ fontSize: "15px" }}
         />
       );
     }

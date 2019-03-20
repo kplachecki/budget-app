@@ -55,6 +55,11 @@ class Contributor extends Component {
       name
     } = this.props;
 
+    let inputValid = false;
+    if (value !== 0 && name.length !== 0) {
+      inputValid = true;
+    }
+
     let addButton = null;
     if (contributorIndex === 0) {
       addButton = (
@@ -63,6 +68,7 @@ class Contributor extends Component {
           type="primary"
           shape="round"
           onClick={() => this.props.onAddContributor(index)}
+          disabled={!inputValid}
         >
           Add
         </Button>
@@ -73,7 +79,7 @@ class Contributor extends Component {
     if (toggle && isEditable && contributorIndex === 0) {
       extension = (
         <div className={classes.ContributorInput}>
-          <Input.Group>
+          <Input.Group compact>
             <Input
               name="contributorValue"
               type="number"

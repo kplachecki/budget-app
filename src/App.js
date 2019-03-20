@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
 import Layout from "./components/Layout/Layout";
-import { Button, Affix } from "antd";
 import "antd/dist/antd.css";
 
 const CONTRIBUTORS = {
@@ -203,12 +202,10 @@ class App extends Component {
   };
 
   onBudgetChange = event => {
-    const currentBudget = this.state.budget;
+    const currentBudget = Number(this.state.budget);
     const newBudget = Number(event.target.value);
 
-    if (currentBudget !== newBudget) {
-      this.setState({ budget: newBudget });
-    }
+    this.setState({ budget: Number(currentBudget + newBudget).toFixed(2) });
   };
 
   transactionDate = () => {
@@ -259,16 +256,21 @@ class App extends Component {
     const transaction = [...this.state.transactions];
 
     const arr = transaction[index].transactionContributors.map(contributor => {
+      if (
+        String(transaction[index].transactionContributors[0].value).length >= 1
+      ) {
+        transaction[index].transactionContributors[0].defaultValue =
+          transaction[index].transactionContributors[0].value;
+      }
       return contributor.defaultValue;
     });
     const totalTransactionValue = arr.reduce((a, b) => a + b);
-    const firstContributorValue =
-      transaction[index].transactionContributors[0].value;
+    // const firstContributorValue =
+    //   transaction[index].transactionContributors[0].value;
 
     if (
-      totalTransactionValue + firstContributorValue >
-        transaction[index].amount ||
-      firstContributorValue > transaction[index].amount
+      totalTransactionValue > transaction[index].amount
+      // firstContributorValue > transaction[index].amount
     ) {
       return;
     } else {

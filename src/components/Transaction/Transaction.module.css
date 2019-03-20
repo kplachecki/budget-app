@@ -1,6 +1,6 @@
 .Transaction {
-  width: 80%;
-  max-width: 450px;
+  width: 88%;
+  max-width: 500px;
   min-height: 80px;
   border: 1px solid #1890ff;
   border-radius: 15px;
@@ -15,6 +15,12 @@
     height: 300px;
   }
 } */
+
+@media (max-width: 320px) and (min-height: 400px) {
+  .Transaction {
+    width: 98%;
+  }
+}
 .Input {
   margin-bottom: 10px;
   display: flex;
@@ -27,4 +33,11 @@
 
 .InputLeft {
   width: 20%;
+  -webkit-appearance: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

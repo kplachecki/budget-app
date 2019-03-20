@@ -13,6 +13,7 @@ class DeleteButton extends Component {
           twoToneColor="red"
           onClick={this.props.deleteTransaction}
           className={classes.DeleteButton}
+          style={{ fontSize: "15px", marginLeft: "5px" }}
         />
       );
     }
