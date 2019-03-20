@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import classes from "./DeleteButton.module.css";
 import { Icon } from "antd";
 
 class DeleteButton extends Component {
@@ -17,7 +16,6 @@ class DeleteButton extends Component {
               this.props.contributorIndex
             )
           }
-          // className={classes.Delete}
         />
       );
     }

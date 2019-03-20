@@ -12,6 +12,7 @@ class Toggle extends Component {
           <Switch
             onClick={this.props.toggleSwitch}
             checked={this.props.toggle}
+            disabled={!this.props.inputValid}
           />
         </div>
       );

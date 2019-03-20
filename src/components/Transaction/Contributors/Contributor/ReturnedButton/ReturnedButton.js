@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import classes from "./ReturnedButton.module.css";
-import { Switch, Icon } from "antd";
+
+import { Switch } from "antd";
 
 class ReturnedButton extends Component {
   render() {

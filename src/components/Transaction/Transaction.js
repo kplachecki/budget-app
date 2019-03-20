@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import classes from "./Transaction.module.css";
 import Toggle from "./Toggle/Toggle";
-import PropTypes from "prop-types";
 import TransactionDate from "./TransactionDate/TransactionDate";
 import DeleteButton from "./DeleteButton/DeleteButton";
 import Editbutton from "./EditButton/EditButton";
@@ -35,6 +34,15 @@ class Transaction extends Component {
       </div>
     );
 
+    let inputValid = false;
+    if (
+      this.props.amount !== 0 &&
+      this.props.amount.length !== 0 &&
+      this.props.description.length !== 0
+    ) {
+      inputValid = true;
+    }
+
     if (this.props.isEditable === false && this.props.index !== 0) {
       transactionContent = (
         <div className={classes.Input}>
@@ -55,15 +63,17 @@ class Transaction extends Component {
         {line}
         <TransactionDate date={this.props.date} />
         <div className={classes.Transaction}>
-          <DeleteButton
-            index={this.props.index}
-            deleteTransaction={this.props.deleteTransaction}
-          />
-          <Editbutton
-            isEditable={this.props.isEditable}
-            onEdit={this.props.onEdit}
-            index={this.props.index}
-          />
+          <div style={{ float: "right" }}>
+            <Editbutton
+              isEditable={this.props.isEditable}
+              onEdit={this.props.onEdit}
+              index={this.props.index}
+            />
+            <DeleteButton
+              index={this.props.index}
+              deleteTransaction={this.props.deleteTransaction}
+            />
+          </div>
           {transactionContent}
 
           <Toggle
@@ -71,6 +81,7 @@ class Transaction extends Component {
             isEditable={this.props.isEditable}
             index={this.props.index}
             toggle={this.props.toggle}
+            inputValid={inputValid}
           />
           <Contributors
             handleDelete={this.props.handleDelete}
@@ -90,10 +101,5 @@ class Transaction extends Component {
     );
   }
 }
-
-// Transaction.propTypes = {
-//   amout: PropTypes.number,
-//   description: PropTypes.string
-// };
 
 export default Transaction;

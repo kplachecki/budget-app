@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
 import Layout from "./components/Layout/Layout";
-import { Button, Affix } from "antd";
 import "antd/dist/antd.css";
 
 const CONTRIBUTORS = {
@@ -259,16 +258,21 @@ class App extends Component {
     const transaction = [...this.state.transactions];
 
     const arr = transaction[index].transactionContributors.map(contributor => {
+      if (
+        String(transaction[index].transactionContributors[0].value).length >= 1
+      ) {
+        transaction[index].transactionContributors[0].defaultValue =
+          transaction[index].transactionContributors[0].value;
+      }
       return contributor.defaultValue;
     });
     const totalTransactionValue = arr.reduce((a, b) => a + b);
-    const firstContributorValue =
-      transaction[index].transactionContributors[0].value;
+    // const firstContributorValue =
+    //   transaction[index].transactionContributors[0].value;
 
     if (
-      totalTransactionValue + firstContributorValue >
-        transaction[index].amount ||
-      firstContributorValue > transaction[index].amount
+      totalTransactionValue > transaction[index].amount
+      // firstContributorValue > transaction[index].amount
     ) {
       return;
     } else {
