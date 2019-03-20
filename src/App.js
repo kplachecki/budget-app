@@ -202,12 +202,10 @@ class App extends Component {
   };
 
   onBudgetChange = event => {
-    const currentBudget = this.state.budget;
+    const currentBudget = Number(this.state.budget);
     const newBudget = Number(event.target.value);
 
-    if (currentBudget !== newBudget) {
-      this.setState({ budget: newBudget });
-    }
+    this.setState({ budget: Number(currentBudget + newBudget).toFixed(2) });
   };
 
   transactionDate = () => {
