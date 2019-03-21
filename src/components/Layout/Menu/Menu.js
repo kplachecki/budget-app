@@ -9,6 +9,7 @@ const menu = props => (
         placeholder="Your budget"
         className={classes.input}
         onBlur={props.budgetChange}
+        max={99999}
       />
 
       <Statistic

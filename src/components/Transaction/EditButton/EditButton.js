@@ -4,13 +4,8 @@ import { Icon } from "antd";
 
 class EditButton extends Component {
   render() {
-    const editArr = this.props.isEditable ? [classes.Accept] : [];
-    const editStr = this.props.isEditable ? "accept" : "edit";
-    // let editStr = "edit";
-    // if (this.props.isEditable) {
-    //   editArr.push(classes.Accept);
-    //   editStr = "accept";
-    // }
+    // const editArr = this.props.isEditable ? [classes.Accept] : [];
+    // const editStr = this.props.isEditable ? "accept" : "edit";
 
     let editButton = null;
     if (this.props.index !== 0) {
@@ -20,7 +15,6 @@ class EditButton extends Component {
           theme="twoTone"
           onClick={this.props.onEdit}
           className={classes.EditButton}
-          style={{ fontSize: "15px" }}
         />
       );
     }
@@ -32,7 +26,6 @@ class EditButton extends Component {
           twoToneColor="#52c41a"
           onClick={this.props.onEdit}
           className={classes.EditButton}
-          style={{ fontSize: "15px" }}
         />
       );
     }

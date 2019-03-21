@@ -5,7 +5,7 @@ import { Switch } from "antd";
 class ReturnedButton extends Component {
   render() {
     const returnedCol = this.props.isReturned ? "#52c41a" : "red";
-    const returnedStr = this.props.isReturned ? "Returned" : "Not Returned";
+    const returnedStr = this.props.isReturned ? "Returned" : "Pending";
 
     let returnedButton = null;
     if (

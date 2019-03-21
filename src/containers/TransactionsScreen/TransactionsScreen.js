@@ -6,7 +6,6 @@ const TransactionsScreen = props => {
   const transactions = currentTransaction.map((transaction, index) => {
     return (
       <Transaction
-        handleDelete={props.handleDelete}
         amount={transaction.amount}
         description={transaction.description}
         toggle={transaction.toggle}

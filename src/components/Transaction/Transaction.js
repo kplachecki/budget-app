@@ -29,6 +29,7 @@ class Transaction extends Component {
             value={this.props.description}
             onChange={this.props.descriptionInputHandler}
             style={{ width: "70%" }}
+            allowClear
           />
         </Input.Group>
       </div>
@@ -63,7 +64,7 @@ class Transaction extends Component {
         {line}
         <TransactionDate date={this.props.date} />
         <div className={classes.Transaction}>
-          <div style={{ float: "right" }}>
+          <div className={classes.Actions}>
             <Editbutton
               isEditable={this.props.isEditable}
               onEdit={this.props.onEdit}
