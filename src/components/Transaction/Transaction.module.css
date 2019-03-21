@@ -1,5 +1,5 @@
 .Transaction {
-  width: 88%;
+  width: 98%;
   max-width: 500px;
   min-height: 80px;
   border: 1px solid #1890ff;
@@ -9,18 +9,25 @@
   box-shadow: 0 2px 3px #188fffaf;
 }
 
-/* @media (min-width: 1200px) and (min-height: 400px) {
-  .Transaction {
-    width: 350px;
-    height: 300px;
-  }
-} */
+.Actions {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
 
-@media (max-width: 320px) and (min-height: 400px) {
+@media (min-width: 360px) {
   .Transaction {
-    width: 98%;
+    width: 92%;
   }
 }
+
+@media (min-width: 361px) {
+  .Transaction {
+    width: 88%;
+  }
+}
+
 .Input {
   margin-bottom: 10px;
   display: flex;

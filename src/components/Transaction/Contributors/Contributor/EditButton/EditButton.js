@@ -1,17 +1,8 @@
 import React, { Component } from "react";
-import classes from "./EditButton.module.css";
 import { Icon } from "antd";
 
 class EditButton extends Component {
   render() {
-    const editStr = this.props.contributorIsEditable ? "accept" : "edit";
-    // let editStr = "edit";
-    // const editArr = [];
-    // if (this.props.contributorIsEditable) {
-    //   editArr.push(classes.Accept);
-    //   editStr = "accept";
-    // }
-
     let editButton = null;
     if (
       this.props.contributorIndex !== 0 &&
@@ -29,7 +20,6 @@ class EditButton extends Component {
               this.props.contributorIndex
             )
           }
-          // className={editArr.join(" ")}
         />
       );
     }
@@ -45,7 +35,6 @@ class EditButton extends Component {
               this.props.contributorIndex
             )
           }
-          // className={editArr.join(" ")}
         />
       );
     }

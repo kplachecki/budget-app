@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import classes from "./Contributor.module.css";
-import EditButton from "./EditButton/EditButton";
 import ReturnedButton from "./ReturnedButton/ReturnedButton";
 import DeleteButton from "./DeleteButton/DeleteButton";
 import { Button, Input, Table } from "antd";
@@ -30,16 +29,23 @@ class Contributor extends Component {
       )
     },
     {
-      title: "Action",
+      title: null,
       dataIndex: "action",
-      render: (text, record) => (
-        <DeleteButton
-          contributorIndex={record.key}
-          toggle={this.props.toggle}
-          onDeleteContributor={this.props.onDeleteContributor}
-          index={this.props.index}
-        />
-      )
+      render: (text, record) => {
+        if (record.isReturned) {
+          return;
+        } else {
+          return (
+            <DeleteButton
+              contributorIndex={record.key}
+              toggle={this.props.toggle}
+              onDeleteContributor={this.props.onDeleteContributor}
+              index={this.props.index}
+              isReturned={record.isReturned}
+            />
+          );
+        }
+      }
     }
   ];
 
@@ -98,6 +104,8 @@ class Contributor extends Component {
                 this.props.onInputContributor(event, index, contributorIndex)
               }
               style={{ width: "70%" }}
+              maxLength={10}
+              allowClear
             />
           </Input.Group>
           {addButton}
@@ -125,20 +133,7 @@ class Contributor extends Component {
       );
     }
 
-    return (
-      <React.Fragment>
-        {extension}
-        {/* <EditButton
-          contributorIsEditable={this.props.contributorIsEditable}
-          contributorIndex={contributorIndex}
-          onEditContributor={this.props.onEditContributor}
-          index={index}
-          isEditable={isEditable}
-          toggle={toggle}
-          isReturned={isReturned}
-        /> */}
-      </React.Fragment>
-    );
+    return <React.Fragment>{extension}</React.Fragment>;
   }
 }
 

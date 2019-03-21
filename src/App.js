@@ -6,7 +6,7 @@ import "antd/dist/antd.css";
 const CONTRIBUTORS = {
   key: "",
   name: "",
-  defaultValue: 0,
+  defaultValue: "",
   value: "",
   isReturned: false,
   contributorIsEditable: true
@@ -38,7 +38,7 @@ class App extends Component {
           {
             key: "",
             name: "",
-            defaultValue: 0,
+            defaultValue: "",
             value: "",
             isReturned: false,
             contributorIsEditable: true
@@ -56,14 +56,6 @@ class App extends Component {
     notReturned: 0
   };
 
-  // inputValidation = (event) => {
-
-  //   if ((event.target.value).length === 0) {
-
-  //   }
-  // }
-
-  //mapping contributors array and sum default contributors values to notReturned in state
   sharedAmountManipulation = index => {
     const transaction = [...this.state.transactions];
     const oldSharedAmount = transaction[index].sharedAmount;
@@ -92,7 +84,6 @@ class App extends Component {
     this.setState({ notReturned: Number(newNotReturned.toFixed(2)) });
   };
 
-  //calculate actual value for each contributor regard to transaction value
   onContributorValue = (index, contributorIndex) => {
     const transaction = [...this.state.transactions];
 
@@ -122,7 +113,6 @@ class App extends Component {
     this.setState({ transactions: transaction });
   };
 
-  //change contributor if value was returned and update notReturned state value
   onReturnedContributor = (index, contributorIndex) => {
     const transaction = [...this.state.transactions];
     const oldSharedAmount = transaction[index].sharedAmount;
@@ -265,13 +255,8 @@ class App extends Component {
       return contributor.defaultValue;
     });
     const totalTransactionValue = arr.reduce((a, b) => a + b);
-    // const firstContributorValue =
-    //   transaction[index].transactionContributors[0].value;
 
-    if (
-      totalTransactionValue > transaction[index].amount
-      // firstContributorValue > transaction[index].amount
-    ) {
+    if (totalTransactionValue > transaction[index].amount) {
       return;
     } else {
       transaction[index].transactionContributors.unshift(defaultContributor);
@@ -366,9 +351,14 @@ class App extends Component {
     }
   };
 
-  onBlurTransactions = transaction => {};
-
   render() {
+    let addButtonState = false;
+    if (
+      String(this.state.transactions[0].amount).length < 1 ||
+      this.state.transactions[0].amount === 0
+    ) {
+      addButtonState = true;
+    }
     return (
       <React.Fragment>
         <Layout
@@ -376,6 +366,7 @@ class App extends Component {
           budgetChange={this.onBudgetChange}
           budget={this.state.budget}
           notReturned={this.state.notReturned}
+          addButtonState={addButtonState}
         >
           <TransactionsScreen
             handleDelete={this.handleDelete}
