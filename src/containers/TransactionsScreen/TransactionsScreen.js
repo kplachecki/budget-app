@@ -20,12 +20,14 @@ const TransactionsScreen = props => {
         index={index}
         onEdit={() => props.onEdit(index)}
         isEditable={transaction.isEditable}
+        splitOption={transaction.splitOption}
         transactionContributors={transaction.transactionContributors}
         onInputContributor={props.onInputContributor}
         onAddContributor={props.onAddContributor}
         onEditContributor={props.onEditContributor}
         onReturnedContributor={props.onReturnedContributor}
         onDeleteContributor={props.onDeleteContributor}
+        onOptionsSwitchChange={props.onOptionsSwitchChange}
       />
     );
   });

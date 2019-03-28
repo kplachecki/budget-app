@@ -19,12 +19,13 @@ const Contributors = props => {
           inputChanged={props.inputChanged}
           isEditable={props.isEditable}
           toggle={props.toggle}
+          isReturned={contributor.isReturned}
+          splitOption={props.splitOption}
           onInputContributor={props.onInputContributor}
           onAddContributor={props.onAddContributor}
           contributorIsEditable={contributor.contributorIsEditable}
           onEditContributor={props.onEditContributor}
           onReturnedContributor={props.onReturnedContributor}
-          isReturned={contributor.isReturned}
           onDeleteContributor={props.onDeleteContributor}
         />
       );

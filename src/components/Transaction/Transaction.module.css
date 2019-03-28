@@ -16,6 +16,11 @@
   margin-bottom: 8px;
 }
 
+.SwitchOptions {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 @media (min-width: 360px) {
   .Transaction {
     width: 92%;

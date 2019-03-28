@@ -5,6 +5,7 @@ import TransactionDate from "./TransactionDate/TransactionDate";
 import DeleteButton from "./DeleteButton/DeleteButton";
 import Editbutton from "./EditButton/EditButton";
 import Contributors from "./Contributors/Contributors";
+import OptionsSwitch from "./OptionsSwitch/OptionsSwitch";
 import { Input, Statistic } from "antd";
 
 class Transaction extends Component {
@@ -59,6 +60,38 @@ class Transaction extends Component {
       );
     }
 
+    let switchOptions = (
+      <Toggle
+        toggleSwitch={this.props.toggleSwitch}
+        isEditable={this.props.isEditable}
+        index={this.props.index}
+        toggle={this.props.toggle}
+        inputValid={inputValid}
+      />
+    );
+
+    if (this.props.toggle && this.props.isEditable) {
+      switchOptions = (
+        <React.Fragment>
+          <Toggle
+            toggleSwitch={this.props.toggleSwitch}
+            isEditable={this.props.isEditable}
+            index={this.props.index}
+            toggle={this.props.toggle}
+            inputValid={inputValid}
+          />
+          <OptionsSwitch
+            toggle={this.props.toggle}
+            onOptionsSwitchChange={this.props.onOptionsSwitchChange}
+            index={this.props.index}
+            transactionContributors={this.props.transactionContributors}
+            splitOption={this.props.splitOption}
+            isEditable={this.props.isEditable}
+          />
+        </React.Fragment>
+      );
+    }
+
     return (
       <React.Fragment>
         {line}
@@ -75,15 +108,9 @@ class Transaction extends Component {
               deleteTransaction={this.props.deleteTransaction}
             />
           </div>
-          {transactionContent}
 
-          <Toggle
-            toggleSwitch={this.props.toggleSwitch}
-            isEditable={this.props.isEditable}
-            index={this.props.index}
-            toggle={this.props.toggle}
-            inputValid={inputValid}
-          />
+          {transactionContent}
+          <div className={classes.SwitchOptions}>{switchOptions}</div>
           <Contributors
             handleDelete={this.props.handleDelete}
             transactionContributors={this.props.transactionContributors}
@@ -91,6 +118,7 @@ class Transaction extends Component {
             inputChanged={this.props.inputChanged}
             isEditable={this.props.isEditable}
             toggle={this.props.toggle}
+            splitOption={this.props.splitOption}
             onInputContributor={this.props.onInputContributor}
             onAddContributor={this.props.onAddContributor}
             onEditContributor={this.props.onEditContributor}

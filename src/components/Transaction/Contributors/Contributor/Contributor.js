@@ -9,7 +9,7 @@ class Contributor extends Component {
     {
       title: "Amount",
       dataIndex: "defaultValue",
-      render: (text, record) => <span>{record.defaultValue + "$"}</span>
+      render: (text, record) => <span>{record.value + "$"}</span>
     },
     {
       title: "Name",
@@ -57,12 +57,12 @@ class Contributor extends Component {
       toggle,
       isEditable,
       value,
-      defaultValue,
-      name
+      name,
+      splitOption
     } = this.props;
 
     let inputValid = false;
-    if (value !== 0 && name.length !== 0) {
+    if (value !== 0 && String(value).length !== 0 && name.length !== 0) {
       inputValid = true;
     }
 
@@ -80,8 +80,12 @@ class Contributor extends Component {
         </Button>
       );
     }
-    let extension = null;
+    let disableInput = false;
 
+    if (splitOption === "equal") {
+      disableInput = true;
+    }
+    let extension = null;
     if (toggle && isEditable && contributorIndex === 0) {
       extension = (
         <div className={classes.ContributorInput}>
@@ -90,11 +94,12 @@ class Contributor extends Component {
               name="contributorValue"
               type="number"
               value={value}
-              placeholder={defaultValue}
+              placeholder={"Amount"}
               style={{ width: "30%" }}
               onChange={event =>
                 this.props.onInputContributor(event, index, contributorIndex)
               }
+              disabled={disableInput}
             />
             <Input
               name="contributorName"
@@ -105,7 +110,6 @@ class Contributor extends Component {
               }
               style={{ width: "70%" }}
               maxLength={10}
-              allowClear
             />
           </Input.Group>
           {addButton}
