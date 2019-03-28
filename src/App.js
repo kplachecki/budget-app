@@ -6,7 +6,6 @@ import "antd/dist/antd.css";
 const CONTRIBUTORS = {
   key: "",
   name: "",
-  defaultValue: "",
   value: "",
   isReturned: false,
   contributorIsEditable: true
@@ -20,6 +19,7 @@ const TRANSACTION = {
   date: null,
   isEditable: true,
   sharedAmount: 0,
+  splitOption: "equal",
   transactionContributors: [CONTRIBUTORS]
 };
 
@@ -34,11 +34,11 @@ class App extends Component {
         date: null,
         isEditable: true,
         sharedAmount: 0,
+        splitOption: "equal",
         transactionContributors: [
           {
             key: "",
             name: "",
-            defaultValue: "",
             value: "",
             isReturned: false,
             contributorIsEditable: true
@@ -56,6 +56,15 @@ class App extends Component {
     notReturned: 0
   };
 
+  onOptionsSwitchChange = (event, index) => {
+    const transaction = [...this.state.transactions];
+    const newSplitOption = event.target.value;
+
+    transaction[index].splitOption = newSplitOption;
+    this.setState({ transactions: transaction });
+    this.onContributorValue(index);
+  };
+
   sharedAmountManipulation = index => {
     const transaction = [...this.state.transactions];
     const oldSharedAmount = transaction[index].sharedAmount;
@@ -64,7 +73,7 @@ class App extends Component {
       if (contributor.isReturned) {
         return 0;
       } else {
-        return contributor.defaultValue;
+        return contributor.value;
       }
     });
     arr[0] = 0;
@@ -88,26 +97,22 @@ class App extends Component {
     const transaction = [...this.state.transactions];
 
     const transactionValue = transaction[index].amount;
-    const divider = transaction[index].transactionContributors.length;
 
-    if (transaction[index].transactionContributors[0].value.length < 1) {
-      transaction[index].transactionContributors[0].defaultValue = Number(
+    if (transaction[index].splitOption === "equal") {
+      const divider = transaction[index].transactionContributors.length;
+
+      transaction[index].transactionContributors[0].value = Number(
         (transactionValue / (divider + 1)).toFixed(2)
       );
-    } else {
-      transaction[index].transactionContributors[0].defaultValue =
-        transaction[index].transactionContributors[0].value;
-    }
 
-    for (let i = 1; i < divider; i++) {
-      if (transaction[index].transactionContributors[i].value.length < 1) {
-        transaction[index].transactionContributors[i].defaultValue = Number(
+      for (let i = 1; i < divider; i++) {
+        transaction[index].transactionContributors[i].value = Number(
           (transactionValue / divider).toFixed(2)
         );
-      } else {
-        transaction[index].transactionContributors[i].defaultValue =
-          transaction[index].transactionContributors[i].value;
       }
+    }
+    if (transaction[index].splitOption === "own") {
+      transaction[index].transactionContributors[0].value = "";
     }
 
     this.setState({ transactions: transaction });
@@ -124,12 +129,11 @@ class App extends Component {
     currentContributor.isReturned = !currentContributor.isReturned;
 
     if (currentContributor.isReturned) {
-      const updatedSharedAmount =
-        oldSharedAmount - currentContributor.defaultValue;
+      const updatedSharedAmount = oldSharedAmount - currentContributor.value;
       transaction[index].sharedAmount = Number(updatedSharedAmount.toFixed(2));
 
       this.notReturnedManipulation(oldSharedAmount, updatedSharedAmount);
-      const newBudget = oldBudget + currentContributor.defaultValue;
+      const newBudget = oldBudget + currentContributor.value;
       this.setState({ budget: Number(newBudget.toFixed(2)) });
     }
 
@@ -171,7 +175,7 @@ class App extends Component {
 
     const arr = currentTransaction.transactionContributors.map(contributor => {
       if (contributor.isReturned) {
-        return contributor.defaultValue;
+        return contributor.value;
       } else {
         return false;
       }
@@ -246,13 +250,7 @@ class App extends Component {
     const transaction = [...this.state.transactions];
 
     const arr = transaction[index].transactionContributors.map(contributor => {
-      if (
-        String(transaction[index].transactionContributors[0].value).length >= 1
-      ) {
-        transaction[index].transactionContributors[0].defaultValue =
-          transaction[index].transactionContributors[0].value;
-      }
-      return contributor.defaultValue;
+      return contributor.value;
     });
     const totalTransactionValue = arr.reduce((a, b) => a + b);
 
@@ -381,6 +379,7 @@ class App extends Component {
             onEditContributor={this.onEditContributor}
             onReturnedContributor={this.onReturnedContributor}
             onDeleteContributor={this.onDeleteContributor}
+            onOptionsSwitchChange={this.onOptionsSwitchChange}
           />
         </Layout>
       </React.Fragment>
