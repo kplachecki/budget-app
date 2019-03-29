@@ -15,9 +15,7 @@ const OptionsSwitch = props => {
     optionsSwitchEqualState = true;
   }
 
-  let optionsSwitch = null;
-
-  optionsSwitch = (
+  return (
     <Radio.Group
       name="inputSwitch"
       size="small"
@@ -32,7 +30,5 @@ const OptionsSwitch = props => {
       </Radio.Button>
     </Radio.Group>
   );
-
-  return optionsSwitch;
 };
 export default OptionsSwitch;
