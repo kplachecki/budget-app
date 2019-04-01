@@ -11,10 +11,11 @@
   justify-content: space-evenly;
   background-color: #1890ff;
   position: fixed;
-  z-index: 1;
+  z-index: 500;
   color: white;
   font-weight: 500;
   align-items: center;
+  top: 0;
 }
 
 .BudgetContent .input {
