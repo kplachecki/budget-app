@@ -4,7 +4,7 @@ import { InputNumber, Statistic } from "antd";
 
 const menu = props => (
   <React.Fragment>
-    <div className={classes.BudgetContent}>
+    <header className={classes.BudgetContent}>
       <InputNumber
         placeholder="Your budget"
         className={classes.input}
@@ -30,7 +30,7 @@ const menu = props => (
           textAlign: "center"
         }}
       />
-    </div>
+    </header>
   </React.Fragment>
 );
 

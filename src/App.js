@@ -289,9 +289,11 @@ class App extends Component {
       return;
     }
     this.budgetDeduction(index);
-    this.setState({
-      notReturned: Number((notReturned - sharedAmount).toFixed(2))
-    });
+    if (transaction[index].toggle) {
+      this.setState({
+        notReturned: Number((notReturned - sharedAmount).toFixed(2))
+      });
+    }
     transaction.splice(index, 1);
     this.setState({ transactions: transaction });
   };

@@ -1,37 +1,46 @@
-import React from "react";
+import React, { Component } from "react";
 import Contributor from "./Contributor/Contributor";
 
-const Contributors = props => {
-  const currentContributors = [...props.transactionContributors];
-  const contributors = currentContributors.map(
-    (contributor, contributorIndex) => {
-      contributor.key = contributorIndex;
-      return (
-        <Contributor
-          contributors={currentContributors}
-          name={contributor.name}
-          value={contributor.value}
-          defaultValue={contributor.defaultValue}
-          key={"contributor " + contributorIndex}
-          contributorIndex={contributorIndex}
-          index={props.index}
-          shareWith={props.shareWith}
-          inputChanged={props.inputChanged}
-          isEditable={props.isEditable}
-          toggle={props.toggle}
-          isReturned={contributor.isReturned}
-          splitOption={props.splitOption}
-          onInputContributor={props.onInputContributor}
-          onAddContributor={props.onAddContributor}
-          contributorIsEditable={contributor.contributorIsEditable}
-          onEditContributor={props.onEditContributor}
-          onReturnedContributor={props.onReturnedContributor}
-          onDeleteContributor={props.onDeleteContributor}
-        />
-      );
+class Contributors extends Component {
+  shouldComponentUpdate(nextProps) {
+    if ((nextProps.toggle || this.props.toggle) && this.props.isEditable) {
+      return true;
+    } else {
+      return false;
     }
-  );
-  return contributors;
-};
+  }
+  render() {
+    const currentContributors = [...this.props.transactionContributors];
+    const contributors = currentContributors.map(
+      (contributor, contributorIndex) => {
+        contributor.key = contributorIndex;
+        return (
+          <Contributor
+            contributors={currentContributors}
+            name={contributor.name}
+            value={contributor.value}
+            defaultValue={contributor.defaultValue}
+            key={"contributor " + contributorIndex}
+            contributorIndex={contributorIndex}
+            index={this.props.index}
+            shareWith={this.props.shareWith}
+            inputChanged={this.props.inputChanged}
+            isEditable={this.props.isEditable}
+            toggle={this.props.toggle}
+            isReturned={contributor.isReturned}
+            splitOption={this.props.splitOption}
+            onInputContributor={this.props.onInputContributor}
+            onAddContributor={this.props.onAddContributor}
+            contributorIsEditable={contributor.contributorIsEditable}
+            onEditContributor={this.props.onEditContributor}
+            onReturnedContributor={this.props.onReturnedContributor}
+            onDeleteContributor={this.props.onDeleteContributor}
+          />
+        );
+      }
+    );
+    return contributors;
+  }
+}
 
 export default Contributors;
