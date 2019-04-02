@@ -2,18 +2,13 @@ import React, { Component } from "react";
 import Contributor from "./Contributor/Contributor";
 
 class Contributors extends Component {
-  // shouldComponentUpdate(nextProps) {
-  //   if (nextProps.toggle || this.props.toggle) {
-  //     return true;
-  //   } else if (this.props.isEditable) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-  // componentWillUpdate() {
-  //   console.log("update", this.props.index);
-  // }
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.toggle || this.props.toggle) {
+      return true;
+    } else {
+      return false;
+    }
+  }
   render() {
     const currentContributors = [...this.props.transactionContributors];
     const contributors = currentContributors.map(

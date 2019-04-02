@@ -8,7 +8,7 @@ class Contributor extends Component {
   dataColumns = [
     {
       title: "Amount",
-      dataIndex: "defaultValue",
+      dataIndex: "value",
       render: (text, record) => <span>{record.value + "$"}</span>
     },
     {
