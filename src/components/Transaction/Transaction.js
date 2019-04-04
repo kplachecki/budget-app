@@ -11,7 +11,7 @@ import { Input, Statistic } from "antd";
 class Transaction extends Component {
   render() {
     const line =
-      this.props.date != null ? (
+      this.props.date !== "" ? (
         <hr style={{ width: "60%", marginTop: "20px" }} />
       ) : null;
 
