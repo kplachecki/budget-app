@@ -1,3 +1,14 @@
+Project is still in development process
+
+Future steps: 
+- connecting to database (done, waiting for merge)
+- login screen & authorization (in progress)
+- UX/UI refactor
+- REDUX implementation
+- new features..
+- ..
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
