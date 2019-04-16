@@ -1,9 +1,9 @@
 ## Project is still in development process
 
 ### Future steps: 
-- connecting to database (done, waiting for merge)
-- login screen & authorization (in progress)
-- UX/UI refactor
+- connecting to database (done)
+- login screen & authorization (done)
+- UX/UI refactor (in progress)
 - REDUX implementation
 - new features..
 - ..
