@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import appID from "./env-app.json";
+//import appID from "./env-app.json";
 import "antd/dist/antd.css";
 import axios from "./axios";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
