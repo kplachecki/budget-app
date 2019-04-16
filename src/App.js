@@ -1,9 +1,9 @@
 import React, { Component } from "react";
+import "antd/dist/antd.css";
+import axios from "./axios";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
 import Layout from "./components/Layout/Layout";
-import "antd/dist/antd.css";
 import Spinner from "./components/Layout/Spinner/Spinner";
-import axios from "./axios";
 
 let CONTRIBUTOR = null;
 
@@ -12,37 +12,234 @@ let TRANSACTION = null;
 class App extends Component {
   state = {
     transactions: null,
-    contributors: [
-      {
-        name: "",
-        value: ""
-      }
-    ],
     budget: null,
     notReturned: null,
     drawerVisible: false,
-    dataLoaded: false
+    loginModalVisible: false,
+    dataLoaded: false,
+    authLogin: {
+      token: localStorage.getItem("token"),
+      id: localStorage.getItem("userID"),
+      email: "",
+      password: ""
+    }
+  };
+
+  user = {
+    userID: "",
+    data: {
+      budget: 0,
+      notReturned: 0,
+      transactions: null
+    }
   };
 
   componentDidMount() {
-    axios
-      .get("/.json")
-      .then(response => {
-        TRANSACTION = response.data.TRANSACTION;
-        CONTRIBUTOR = response.data.CONTRIBUTOR;
-        const transactions = response.data.transactions;
-        const budget = response.data.budget;
-        const notReturned = response.data.notReturned;
-        this.setState({ budget: budget });
-        this.setState({ notReturned: notReturned });
-        this.setState({ transactions: transactions }, () => {
-          this.setState({ dataLoaded: true });
+    const dateTime = new Date().getTime();
+    if (
+      localStorage.getItem("token") !== null &&
+      localStorage.getItem("tokenExpireDate") > dateTime
+    ) {
+      axios
+        .get("/defaultData.json")
+        .then(response => {
+          CONTRIBUTOR = response.data.CONTRIBUTOR;
+          TRANSACTION = response.data.TRANSACTION;
+
+          axios
+            .get(
+              `/users/${this.state.authLogin.id}/data.json?auth=${
+                this.state.authLogin.token
+              }`
+            )
+            .then(response => {
+              const transactions = response.data.transactions;
+              const budget = response.data.budget;
+              const notReturned = response.data.notReturned;
+              this.setState({ budget: budget });
+              this.setState({ notReturned: notReturned });
+              this.setState({ transactions: transactions }, () => {
+                this.setState({ dataLoaded: true });
+              });
+            })
+            .catch(error => {
+              alert(error);
+            });
+        })
+        .catch(error => {
+          alert(error);
         });
-      })
-      .catch(error => {
-        alert(error);
-      });
+    } else {
+      this.setState({ loginModalVisible: true });
+      axios
+        .get("/defaultData.json")
+        .then(response => {
+          CONTRIBUTOR = response.data.CONTRIBUTOR;
+          TRANSACTION = response.data.TRANSACTION;
+
+          const transactions = response.data.transactions;
+          const budget = 0;
+          const notReturned = 0;
+          this.setState({ budget: budget });
+          this.setState({ notReturned: notReturned });
+          this.setState({ transactions: transactions }, () => {
+            this.setState({ dataLoaded: true });
+          });
+        })
+        .catch(error => {
+          alert(error);
+        });
+    }
   }
+
+  onEmailHandler = event => {
+    const authLogin = { ...this.state.authLogin };
+    const userEmail = event.target.value;
+
+    authLogin.email = userEmail;
+    this.setState({ authLogin: authLogin });
+  };
+
+  onPasswordHandler = event => {
+    const authLogin = { ...this.state.authLogin };
+    const userPassword = event.target.value;
+
+    authLogin.password = userPassword;
+    this.setState({ authLogin: authLogin });
+  };
+
+  onSignInHandler = () => {
+    const authLogin = { ...this.state.authLogin };
+    const authData = {
+      email: authLogin.email,
+      password: authLogin.password,
+      returnSecureToken: true
+    };
+
+    axios
+      .post(
+        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=",
+        authData
+      )
+      .then(response => {
+        if (response.status === 200) {
+          const authLogin = { ...this.state.authLogin };
+
+          const tokenExpireDate =
+            new Date().getTime() + response.data.expiresIn * 1000;
+          localStorage.setItem("token", response.data.idToken);
+          localStorage.setItem("tokenExpireDate", tokenExpireDate);
+          localStorage.setItem("userID", response.data.localId);
+          this.checkAuthTimeout(response.data.expiresIn);
+          authLogin.id = response.data.localId;
+          authLogin.token = response.data.idToken;
+
+          axios
+            .get(
+              `/users/${response.data.localId}/data/transactions.json?auth=${
+                response.data.idToken
+              }`
+            )
+            .then(response => {
+              if (response.status === 200) {
+                const transactions = response.data;
+                this.setState({ transactions: transactions });
+                this.setState({ loginModalVisible: false });
+                this.setState({ authLogin: authLogin });
+              } else {
+                alert("Couldn't get transactions data!");
+              }
+            })
+            .catch(err => console.log(err));
+        }
+      })
+      .catch(err => alert(err));
+  };
+
+  onSubmitHandler = () => {
+    const authLogin = { ...this.state.authLogin };
+    const authData = {
+      email: authLogin.email,
+      password: authLogin.password,
+      returnSecureToken: true
+    };
+    axios
+      .post(
+        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=",
+        authData
+      )
+      .then(response => {
+        if (response.status === 200) {
+          const user = { ...this.user };
+          const authLogin = { ...this.state.authLogin };
+          const transactions = [];
+
+          transactions[0] = TRANSACTION;
+          transactions[0].transactionContributors = [];
+          transactions[0].transactionContributors[0] = CONTRIBUTOR;
+
+          user.data.transactions = transactions;
+          user.userID = response.data.localId;
+          authLogin.id = response.data.localId;
+          authLogin.token = response.data.idToken;
+          authLogin.id = user.userID;
+
+          const tokenExpireDate =
+            new Date().getTime() + response.data.expiresIn * 1000;
+          localStorage.setItem("token", response.data.idToken);
+          localStorage.setItem("tokenExpireDate", tokenExpireDate);
+          localStorage.setItem("userID", response.data.localId);
+
+          this.checkAuthTimeout(response.data.expiresIn);
+          axios
+            .put(
+              `/users/${response.data.localId}.json?auth=${
+                response.data.idToken
+              }`,
+              user
+            )
+            .then(response => {
+              if (response.status === 200) {
+                this.setState({ loginModalVisible: false });
+                this.setState({ authLogin: authLogin });
+              } else {
+                alert("Couldn't create new user!");
+              }
+            })
+            .catch(err => alert(err));
+        }
+      })
+      .catch(err => alert(err));
+  };
+
+  checkAuthTimeout = expiresIn => {
+    setTimeout(() => {
+      this.onLogout();
+    }, expiresIn * 1000);
+  };
+
+  onLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("tokenExpireDate");
+    localStorage.removeItem("userID");
+    window.location.reload();
+  };
+
+  onLoginModalOpen = () => {
+    this.setState({ loginModalVisible: true });
+  };
+
+  onLoginModalClose = () => {
+    const dateTime = new Date().getTime();
+    if (
+      localStorage.getItem("token") !== null &&
+      localStorage.getItem("tokenExpireDate") > dateTime
+    ) {
+      this.setState({ loginModalVisible: false });
+    } else {
+      return;
+    }
+  };
 
   onDrawerOpen = () => {
     this.setState({ drawerVisible: true });
@@ -62,7 +259,12 @@ class App extends Component {
     transaction = [transaction[0]];
 
     axios
-      .put("/transactions.json", transaction)
+      .put(
+        `/users/${this.state.authLogin.id}/data/transactions.json?auth=${
+          this.state.authLogin.token
+        }`,
+        transaction
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ transactions: transaction });
@@ -75,7 +277,12 @@ class App extends Component {
       });
 
     axios
-      .put("/budget.json", 0)
+      .put(
+        `/users/${this.state.authLogin.id}/data/budget.json?auth=${
+          this.state.authLogin.token
+        }`,
+        0
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ budget: 0 });
@@ -88,7 +295,12 @@ class App extends Component {
       });
 
     axios
-      .put("/notReturned.json", 0)
+      .put(
+        `/users/${this.state.authLogin.id}/data/notReturned.json?auth=${
+          this.state.authLogin.token
+        }`,
+        0
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ notReturned: 0 });
@@ -108,7 +320,12 @@ class App extends Component {
     transaction[index].splitOption = newSplitOption;
     transaction = this.onContributorValue(index, transaction);
     axios
-      .put("/transactions.json", transaction)
+      .put(
+        `/users/${this.state.authLogin.id}/data/transactions.json?auth=${
+          this.state.authLogin.token
+        }`,
+        transaction
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ transactions: transaction });
@@ -143,7 +360,12 @@ class App extends Component {
       (oldNotReturned - oldSharedAmount + updatedSharedAmount).toFixed(2)
     );
     axios
-      .put("/notReturned.json", newNotReturned)
+      .put(
+        `/users/${this.state.authLogin.id}/data/notReturned.json?auth=${
+          this.state.authLogin.token
+        }`,
+        newNotReturned
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ notReturned: newNotReturned });
@@ -195,7 +417,12 @@ class App extends Component {
         (oldBudget + currentContributor.value).toFixed(2)
       );
       axios
-        .put("/budget.json", newBudget)
+        .put(
+          `/users/${this.state.authLogin.id}/data/budget.json?auth=${
+            this.state.authLogin.token
+          }`,
+          newBudget
+        )
         .then(response => {
           if (response.statusText === "OK") {
             this.setState({ budget: newBudget });
@@ -206,7 +433,12 @@ class App extends Component {
         .catch(error => console.log(error));
     }
     axios
-      .put("/transactions.json", transaction)
+      .put(
+        `/users/${this.state.authLogin.id}/data/transactions.json?auth=${
+          this.state.authLogin.token
+        }`,
+        transaction
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ transactions: transaction });
@@ -238,7 +470,12 @@ class App extends Component {
     if (transaction[index].isEditable && prevAmount !== newAmount) {
       const newBudget = Number((budget + prevAmount - newAmount).toFixed(2));
       axios
-        .put("/budget.json", newBudget)
+        .put(
+          `/users/${this.state.authLogin.id}/data/budget.json?auth=${
+            this.state.authLogin.token
+          }`,
+          newBudget
+        )
         .then(response => {
           if (response.statusText === "OK") {
             this.setState({ budget: newBudget });
@@ -250,7 +487,12 @@ class App extends Component {
     }
     transaction[index].isEditable = !transaction[index].isEditable;
     axios
-      .put("/transactions.json", transaction)
+      .put(
+        `/users/${this.state.authLogin.id}/data/transactions.json?auth=${
+          this.state.authLogin.token
+        }`,
+        transaction
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ transactions: transaction });
@@ -280,7 +522,12 @@ class App extends Component {
     );
 
     axios
-      .put("/budget.json", newBudget)
+      .put(
+        `/users/${this.state.authLogin.id}/data/budget.json?auth=${
+          this.state.authLogin.token
+        }`,
+        newBudget
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ budget: newBudget });
@@ -304,10 +551,14 @@ class App extends Component {
     const newBudget = Number(currentBudget + providedBudget).toFixed(2);
 
     axios
-      .put("/budget.json", newBudget)
+      .put(
+        `/users/${this.state.authLogin.id}/data/budget.json?auth=${
+          this.state.authLogin.token
+        }`,
+        newBudget
+      )
       .then(response => {
         if (response.statusText === "OK") {
-          console.log(response);
           this.setState({ budget: Number(newBudget) });
         } else {
           alert("Couldn't update budget!");
@@ -335,7 +586,12 @@ class App extends Component {
         (notReturned - transaction[index].sharedAmount).toFixed(2)
       );
       axios
-        .put("/notReturned.json", newNotReturned)
+        .put(
+          `/users/${this.state.authLogin.id}/data/notReturned.json?auth=${
+            this.state.authLogin.token
+          }`,
+          newNotReturned
+        )
         .then(response => {
           if (response.statusText === "OK") {
             this.setState({
@@ -351,7 +607,12 @@ class App extends Component {
         (notReturned + transaction[index].sharedAmount).toFixed(2)
       );
       axios
-        .put("/notReturned.json", newNotReturned)
+        .put(
+          `/users/${this.state.authLogin.id}/data/notReturned.json?auth=${
+            this.state.authLogin.token
+          }`,
+          newNotReturned
+        )
         .then(response => {
           if (response.statusText === "OK") {
             this.setState({
@@ -364,7 +625,12 @@ class App extends Component {
         .catch(error => console.log(error));
     }
     axios
-      .put("/transactions.json", transaction)
+      .put(
+        `/users/${this.state.authLogin.id}/data/transactions.json?auth=${
+          this.state.authLogin.token
+        }`,
+        transaction
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({
@@ -391,7 +657,12 @@ class App extends Component {
     const newBudget = this.budgetAdd(transaction);
 
     axios
-      .put("/transactions.json", transaction)
+      .put(
+        `/users/${this.state.authLogin.id}/data/transactions.json?auth=${
+          this.state.authLogin.token
+        }`,
+        transaction
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ transactions: transaction });
@@ -401,7 +672,12 @@ class App extends Component {
       })
       .catch(error => console.log(error));
     axios
-      .put("/budget.json", newBudget)
+      .put(
+        `/users/${this.state.authLogin.id}/data/budget.json?auth=${
+          this.state.authLogin.token
+        }`,
+        newBudget
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ budget: newBudget });
@@ -436,7 +712,12 @@ class App extends Component {
       transaction = this.onEditContributor(index, 1, transaction);
 
       axios
-        .put("/transactions.json", transaction)
+        .put(
+          `/users/${this.state.authLogin.id}/data/transactions.json?auth=${
+            this.state.authLogin.token
+          }`,
+          transaction
+        )
         .then(response => {
           if (response.statusText === "OK") {
             this.setState({ transactions: transaction });
@@ -466,7 +747,12 @@ class App extends Component {
     const oldSharedAmount = sharedAmountOutput[1];
     const updatedSharedAmount = sharedAmountOutput[2];
     axios
-      .put("/transactions.json", transaction)
+      .put(
+        `/users/${this.state.authLogin.id}/data/transactions.json?auth=${
+          this.state.authLogin.token
+        }`,
+        transaction
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.notReturnedManipulation(oldSharedAmount, updatedSharedAmount);
@@ -490,7 +776,12 @@ class App extends Component {
 
     transaction.splice(index, 1);
     axios
-      .put("/transactions.json", transaction)
+      .put(
+        `/users/${this.state.authLogin.id}/data/transactions.json?auth=${
+          this.state.authLogin.token
+        }`,
+        transaction
+      )
       .then(response => {
         if (response.statusText === "OK") {
           this.budgetDeduction(index);
@@ -499,7 +790,12 @@ class App extends Component {
               (notReturned - sharedAmount).toFixed(2)
             );
             axios
-              .put("/notReturned.json", newNotReturned)
+              .put(
+                `/users/${this.state.authLogin.id}/data/notReturned.json?auth=${
+                  this.state.authLogin.token
+                }`,
+                newNotReturned
+              )
               .then(response => {
                 if (response.statusText === "OK") {
                   this.setState({
@@ -593,6 +889,15 @@ class App extends Component {
           onDrawerClose={this.onDrawerClose}
           drawerVisible={this.state.drawerVisible}
           resetHandler={this.resetHandler}
+          loginModalVisible={this.state.loginModalVisible}
+          onLoginModalOpen={this.onLoginModalOpen}
+          onLoginModalClose={this.onLoginModalClose}
+          onPasswordHandler={this.onPasswordHandler}
+          onEmailHandler={this.onEmailHandler}
+          onSubmitHandler={this.onSubmitHandler}
+          onSignInHandler={this.onSignInHandler}
+          onLogout={this.onLogout}
+          authLogin={this.state.authLogin}
         >
           <TransactionsScreen
             handleDelete={this.handleDelete}
