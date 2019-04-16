@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-//import appID from "./env-app.json";
+appID from "./env-app.json";
 import "antd/dist/antd.css";
 import axios from "./axios";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
@@ -120,7 +120,7 @@ class App extends Component {
     axios
       .post(
         `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${
-          process.env.APP_ID
+          appID.appID
         }`,
         authData
       )
@@ -169,7 +169,7 @@ class App extends Component {
     axios
       .post(
         `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${
-          process.env.APP_ID
+          appID.appID
         }`,
         authData
       )
