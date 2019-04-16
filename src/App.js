@@ -120,7 +120,7 @@ class App extends Component {
     axios
       .post(
         `https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=${
-          APP_ID
+          process.env.APP_ID
         }`,
         authData
       )
@@ -169,7 +169,7 @@ class App extends Component {
     axios
       .post(
         `https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=${
-          APP_ID
+          process.env.APP_ID
         }`,
         authData
       )
