@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import appID from "./env-app.json";
 import { message } from "antd";
+import appID from "./env-app.json";
 import "antd/dist/antd.css";
 import axios from "./axios";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
@@ -70,12 +70,10 @@ class App extends Component {
             })
             .catch(error => {
               message.error("Couldn't get default data!");
-              console.log(error);
             });
         })
         .catch(error => {
           message.error("Couldn't get default data!");
-          console.log(error);
         });
     } else {
       this.setState({ loginModalVisible: true });
@@ -96,7 +94,6 @@ class App extends Component {
         })
         .catch(error => {
           message.error("Couldn't get default data!");
-          console.log(error);
         });
     }
   }
@@ -164,7 +161,6 @@ class App extends Component {
         }
       })
       .catch(err => {
-        console.log(err);
         message.error("Please check your password or email address");
       });
   };
@@ -217,15 +213,12 @@ class App extends Component {
               if (response.status === 200) {
                 this.setState({ loginModalVisible: false });
                 this.setState({ authLogin: authLogin });
-              } else {
-                message.error("Couldn't create new user!");
               }
             })
-            .catch(err => console.log(err));
+            .catch(err => message.error("Couldn't create new user!"));
         }
       })
       .catch(err => {
-        console.log(err);
         message.error("Email address already exists");
       });
   };
@@ -282,7 +275,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't reset transactions!");
-        console.log(error);
       });
 
     axios
@@ -299,7 +291,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't reset budget!");
-        console.log(error);
       });
 
     axios
@@ -316,7 +307,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't reset pending for return value!");
-        console.log(error);
       });
   };
 
@@ -340,7 +330,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't switch share options!");
-        console.log(error);
       });
   };
 
@@ -381,7 +370,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't update pending for return value!");
-        console.log(error);
       });
   };
 
@@ -439,7 +427,6 @@ class App extends Component {
         })
         .catch(error => {
           message.error("Couldn't update budget!");
-          console.log(error);
         });
     }
     axios
@@ -456,7 +443,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't return contributor");
-        console.log(error);
       });
   };
 
@@ -494,7 +480,6 @@ class App extends Component {
         })
         .catch(error => {
           message.error("Couldn't update budget!");
-          console.log(error);
         });
     }
     transaction[index].isEditable = !transaction[index].isEditable;
@@ -512,7 +497,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't update transaction!");
-        console.log(error);
       });
   };
 
@@ -548,7 +532,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't update budget!");
-        console.log(error);
       });
   };
 
@@ -578,7 +561,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't update budget!");
-        console.log(error);
       });
   };
 
@@ -616,7 +598,6 @@ class App extends Component {
         })
         .catch(error => {
           message.error("Couldn't update pending for return value!");
-          console.log(error);
         });
     } else {
       const newNotReturned = Number(
@@ -638,7 +619,6 @@ class App extends Component {
         })
         .catch(error => {
           message.error("Couldn't update pending for return value!");
-          console.log(error);
         });
     }
     axios
@@ -657,7 +637,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't share transaction!");
-        console.log(error);
       });
   };
 
@@ -688,7 +667,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't add new transaction!");
-        console.log(error);
       });
     axios
       .put(
@@ -704,7 +682,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't update budget!");
-        console.log(error);
       });
   };
 
@@ -748,7 +725,6 @@ class App extends Component {
         })
         .catch(error => {
           message.error("Couldn't add contributor!");
-          console.log(error);
         });
     }
   };
@@ -784,7 +760,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't delete contributor!");
-        console.log(error);
       });
   };
 
@@ -829,7 +804,6 @@ class App extends Component {
               })
               .catch(error => {
                 message.error("Couldn't update pending for return value!");
-                console.log(error);
               });
           }
 
@@ -838,7 +812,6 @@ class App extends Component {
       })
       .catch(error => {
         message.error("Couldn't delete transaction!");
-        console.log(error);
       });
   };
 
