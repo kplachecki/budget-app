@@ -14,7 +14,7 @@ const drawerRight = props => (
       flexDirection: "column",
       minHeight: "30vh"
     }}
-    width="30%"
+    width="40%"
   >
     <Button type="primary" onClick={props.onLogout}>
       Logout
