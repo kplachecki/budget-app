@@ -144,14 +144,18 @@ class App extends Component {
 
           axios
             .get(
-              `/users/${response.data.localId}/data/transactions.json?auth=${
+              `/users/${response.data.localId}/data.json?auth=${
                 response.data.idToken
               }`
             )
             .then(response => {
               if (response.status === 200) {
-                const transactions = response.data;
+                const transactions = response.data.transactions;
+                const budget = response.data.budget;
+                const notReturned = response.data.notReturned;
                 this.setState({ transactions: transactions });
+                this.setState({ budget: budget });
+                this.setState({ notReturned: notReturned });
                 this.setState({ loginModalVisible: false });
                 this.setState({ authLogin: authLogin });
               } else {
