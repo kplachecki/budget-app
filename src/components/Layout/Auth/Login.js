@@ -48,9 +48,10 @@ class LoginForm extends Component {
     return (
       <Modal
         visible={this.props.loginModalVisible}
-        title="Budget App"
+        title="Welcome in Budget App"
         onCancel={this.props.onLoginModalClose}
         closable={false}
+        bodyStyle={{ padding: "10px" }}
         footer={[
           <Button
             disabled={this.loginState.loginButton}
@@ -58,7 +59,7 @@ class LoginForm extends Component {
             type="default"
             onClick={this.props.onSignInHandler}
           >
-            Sign-in
+            Sign In
           </Button>,
           <span key="Or" style={{ marginLeft: "10px", marginRight: "10px" }}>
             Or
@@ -69,10 +70,11 @@ class LoginForm extends Component {
             type="primary"
             onClick={this.props.onSubmitHandler}
           >
-            Sign-up
+            Sign Up
           </Button>
         ]}
       >
+        <p className={classes.loginMessage}>Please Sign In or Sign Up first</p>
         <Form
           onSubmit={this.props.onSubmitHandler}
           className={classes.loginForm}
@@ -120,6 +122,6 @@ class LoginForm extends Component {
     );
   }
 }
-const Login = Form.create({ name: "register" })(LoginForm);
+const Login = Form.create({})(LoginForm);
 
 export default Login;

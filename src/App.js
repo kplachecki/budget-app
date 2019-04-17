@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 import appID from "./env-app.json";
+import { message } from "antd";
 import "antd/dist/antd.css";
 import axios from "./axios";
 import TransactionsScreen from "./containers/TransactionsScreen/TransactionsScreen";
 import Layout from "./components/Layout/Layout";
 import Spinner from "./components/Layout/Spinner/Spinner";
+
+message.config({
+  maxCount: 1
+});
 
 let CONTRIBUTOR = null;
 
@@ -64,11 +69,13 @@ class App extends Component {
               });
             })
             .catch(error => {
-              alert(error);
+              message.error("Couldn't get default data!");
+              console.log(error);
             });
         })
         .catch(error => {
-          alert(error);
+          message.error("Couldn't get default data!");
+          console.log(error);
         });
     } else {
       this.setState({ loginModalVisible: true });
@@ -88,7 +95,8 @@ class App extends Component {
           });
         })
         .catch(error => {
-          alert(error);
+          message.error("Couldn't get default data!");
+          console.log(error);
         });
     }
   }
@@ -150,13 +158,15 @@ class App extends Component {
                 this.setState({ loginModalVisible: false });
                 this.setState({ authLogin: authLogin });
               } else {
-                alert("Couldn't get transactions data!");
+                message.error("Couldn't get transactions data!");
               }
-            })
-            .catch(err => console.log(err));
+            });
         }
       })
-      .catch(err => alert(err));
+      .catch(err => {
+        console.log(err);
+        message.error("Please check your password or email address");
+      });
   };
 
   onSubmitHandler = () => {
@@ -208,13 +218,16 @@ class App extends Component {
                 this.setState({ loginModalVisible: false });
                 this.setState({ authLogin: authLogin });
               } else {
-                alert("Couldn't create new user!");
+                message.error("Couldn't create new user!");
               }
             })
-            .catch(err => alert(err));
+            .catch(err => console.log(err));
         }
       })
-      .catch(err => alert(err));
+      .catch(err => {
+        console.log(err);
+        message.error("Email address already exists");
+      });
   };
 
   checkAuthTimeout = expiresIn => {
@@ -235,15 +248,7 @@ class App extends Component {
   };
 
   onLoginModalClose = () => {
-    const dateTime = new Date().getTime();
-    if (
-      localStorage.getItem("token") !== null &&
-      localStorage.getItem("tokenExpireDate") > dateTime
-    ) {
-      this.setState({ loginModalVisible: false });
-    } else {
-      return;
-    }
+    message.warning("Please Sign In or Sign Up first");
   };
 
   onDrawerOpen = () => {
@@ -273,11 +278,10 @@ class App extends Component {
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ transactions: transaction });
-        } else {
-          alert("Couldn't reset transactions!");
         }
       })
       .catch(error => {
+        message.error("Couldn't reset transactions!");
         console.log(error);
       });
 
@@ -291,11 +295,10 @@ class App extends Component {
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ budget: 0 });
-        } else {
-          alert("Couldn't reset budget!");
         }
       })
       .catch(error => {
+        message.error("Couldn't reset budget!");
         console.log(error);
       });
 
@@ -309,11 +312,10 @@ class App extends Component {
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ notReturned: 0 });
-        } else {
-          alert("Couldn't reset pending for return value!");
         }
       })
       .catch(error => {
+        message.error("Couldn't reset pending for return value!");
         console.log(error);
       });
   };
@@ -334,11 +336,12 @@ class App extends Component {
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ transactions: transaction });
-        } else {
-          alert("Couldn't switch share options!");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        message.error("Couldn't switch share options!");
+        console.log(error);
+      });
   };
 
   sharedAmountManipulation = (index, transaction) => {
@@ -374,11 +377,12 @@ class App extends Component {
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ notReturned: newNotReturned });
-        } else {
-          alert("Couldn't update pending for return value!");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        message.error("Couldn't update pending for return value!");
+        console.log(error);
+      });
   };
 
   onContributorValue = (index, transaction) => {
@@ -431,11 +435,12 @@ class App extends Component {
         .then(response => {
           if (response.statusText === "OK") {
             this.setState({ budget: newBudget });
-          } else {
-            alert("Couldn't update budget!");
           }
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          message.error("Couldn't update budget!");
+          console.log(error);
+        });
     }
     axios
       .put(
@@ -447,11 +452,12 @@ class App extends Component {
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ transactions: transaction });
-        } else {
-          alert("Couldn't return contributor");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        message.error("Couldn't return contributor");
+        console.log(error);
+      });
   };
 
   onEditContributor = (index, contributorIndex, transaction) => {
@@ -484,11 +490,12 @@ class App extends Component {
         .then(response => {
           if (response.statusText === "OK") {
             this.setState({ budget: newBudget });
-          } else {
-            alert("Couldn't update budget!");
           }
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          message.error("Couldn't update budget!");
+          console.log(error);
+        });
     }
     transaction[index].isEditable = !transaction[index].isEditable;
     axios
@@ -501,11 +508,12 @@ class App extends Component {
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ transactions: transaction });
-        } else {
-          alert("Couldn't update transaction!");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        message.error("Couldn't update transaction!");
+        console.log(error);
+      });
   };
 
   budgetDeduction = index => {
@@ -536,11 +544,12 @@ class App extends Component {
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ budget: newBudget });
-        } else {
-          alert("Couldn't update budget!");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        message.error("Couldn't update budget!");
+        console.log(error);
+      });
   };
 
   budgetAdd = transaction => {
@@ -565,11 +574,12 @@ class App extends Component {
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ budget: Number(newBudget) });
-        } else {
-          alert("Couldn't update budget!");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        message.error("Couldn't update budget!");
+        console.log(error);
+      });
   };
 
   transactionDate = transaction => {
@@ -602,11 +612,12 @@ class App extends Component {
             this.setState({
               notReturned: newNotReturned
             });
-          } else {
-            alert("Couldn't update pending for return value!");
           }
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          message.error("Couldn't update pending for return value!");
+          console.log(error);
+        });
     } else {
       const newNotReturned = Number(
         (notReturned + transaction[index].sharedAmount).toFixed(2)
@@ -623,11 +634,12 @@ class App extends Component {
             this.setState({
               notReturned: newNotReturned
             });
-          } else {
-            alert("Couldn't update pending for return value!");
           }
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          message.error("Couldn't update pending for return value!");
+          console.log(error);
+        });
     }
     axios
       .put(
@@ -641,11 +653,12 @@ class App extends Component {
           this.setState({
             transactions: transaction
           });
-        } else {
-          alert("Couldn't share transaction!");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        message.error("Couldn't share transaction!");
+        console.log(error);
+      });
   };
 
   onAddTransaction = () => {
@@ -671,11 +684,12 @@ class App extends Component {
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ transactions: transaction });
-        } else {
-          alert("Couldn't add new transaction!");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        message.error("Couldn't add new transaction!");
+        console.log(error);
+      });
     axios
       .put(
         `/users/${this.state.authLogin.id}/data/budget.json?auth=${
@@ -686,11 +700,12 @@ class App extends Component {
       .then(response => {
         if (response.statusText === "OK") {
           this.setState({ budget: newBudget });
-        } else {
-          alert("Couldn't update budget!");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        message.error("Couldn't update budget!");
+        console.log(error);
+      });
   };
 
   onAddContributor = index => {
@@ -703,7 +718,9 @@ class App extends Component {
     const totalTransactionValue = arr.reduce((a, b) => a + b);
 
     if (totalTransactionValue > transaction[index].amount) {
-      return alert("Contributors values are over transaction amount!");
+      return message.warning(
+        "Contributors values are over transaction amount!"
+      );
     } else {
       transaction[index].transactionContributors.unshift(defaultContributor);
       transaction = this.onContributorValue(index, transaction);
@@ -727,11 +744,12 @@ class App extends Component {
           if (response.statusText === "OK") {
             this.setState({ transactions: transaction });
             this.notReturnedManipulation(oldSharedAmount, updatedSharedAmount);
-          } else {
-            alert("Couldn't add contributor!");
           }
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          message.error("Couldn't add contributor!");
+          console.log(error);
+        });
     }
   };
 
@@ -762,11 +780,12 @@ class App extends Component {
         if (response.statusText === "OK") {
           this.notReturnedManipulation(oldSharedAmount, updatedSharedAmount);
           this.setState({ transactions: transaction });
-        } else {
-          alert("Couldn't delete contributor!");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        message.error("Couldn't delete contributor!");
+        console.log(error);
+      });
   };
 
   onDeleteTransaction = index => {
@@ -806,19 +825,21 @@ class App extends Component {
                   this.setState({
                     notReturned: newNotReturned
                   });
-                } else {
-                  alert("Couldn't update pending for return value!");
                 }
               })
-              .catch(error => console.log(error));
+              .catch(error => {
+                message.error("Couldn't update pending for return value!");
+                console.log(error);
+              });
           }
 
           this.setState({ transactions: transaction });
-        } else {
-          alert("Couldn't delete transaction!");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        message.error("Couldn't delete transaction!");
+        console.log(error);
+      });
   };
 
   onInputContributor = (event, index, contributorIndex) => {
