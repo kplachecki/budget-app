@@ -1,4 +1,5 @@
 import React from "react";
+import classes from "./Drawer.module.css";
 import { Button, Drawer, Popconfirm } from "antd";
 
 const drawerRight = props => (
@@ -12,11 +13,12 @@ const drawerRight = props => (
       display: "flex",
       justifyContent: "space-evenly",
       flexDirection: "column",
-      minHeight: "30vh"
+      minHeight: "30vh",
+      alignItems: "center"
     }}
-    width="40%"
+    width="25vh"
   >
-    <Button type="primary" onClick={props.onLogout}>
+    <Button type="primary" onClick={props.onLogout} className={classes.button}>
       Logout
     </Button>
     <Popconfirm
@@ -25,7 +27,9 @@ const drawerRight = props => (
       placement="bottomLeft"
       arrowPointAtCenter
     >
-      <Button type="danger">Reset App</Button>
+      <Button type="danger" className={classes.button}>
+        Reset App
+      </Button>
     </Popconfirm>
   </Drawer>
 );
