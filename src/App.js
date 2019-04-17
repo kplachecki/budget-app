@@ -574,7 +574,7 @@ class App extends Component {
 
   transactionDate = transaction => {
     const today = new Date();
-    const month = today.toLocaleString("pl-pl", { month: "long" });
+    const month = today.toLocaleString("en-en", { month: "long" });
     transaction[1].date =
       today.getDate() + " " + month + " " + today.getFullYear();
     return transaction;
